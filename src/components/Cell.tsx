@@ -32,7 +32,6 @@ export function Cell({
       onClick={() => onSelect(position)}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && onSelect(position)}
     >
       {value || ''}
     </span>
