@@ -1,11 +1,19 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import type { Puzzle, CellPosition, UserInputsMap } from '@/types';
 import { cellKey } from '@/utils';
+import { MAX_MISTAKES } from '@/constants';
 
 export function useSudokuGame(puzzle: Puzzle) {
   const [userInputs, setUserInputs] = useState<UserInputsMap>(new Map());
   const [selectedCell, setSelectedCell] = useState<CellPosition>([-1, -1]);
-  
+  const [mistakes, setMistakes] = useState(0);
+  const gameOver = mistakes >= MAX_MISTAKES;
+  useEffect(() => {
+    setUserInputs(new Map());
+    setSelectedCell([-1, -1]);
+    setMistakes(0);
+  }, [puzzle]);
+
   const solution = useMemo(
     () => puzzle.solution.map((row) => [...row]),
     [puzzle.solution]
@@ -20,10 +28,13 @@ export function useSudokuGame(puzzle: Puzzle) {
   const selectCell = (pos: CellPosition) => setSelectedCell(pos);
   
   const assignValue = (value: number) => {
+    if (gameOver) return;
     const [row, col] = selectedCell;
     if (fixed[row][col]) return;
     
     const isCorrect = solution[row][col] === value;
+    if (!isCorrect) setMistakes((prev) => prev + 1);
+    
     setUserInputs((prev) => {
       const updated = new Map(prev);
       updated.set(cellKey(row, col), { value, isCorrect });
@@ -56,6 +67,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     selectedCell[0] === pos[0] && selectedCell[1] === pos[1];
   
   const isKeyboardDisabled = (): boolean => {
+    if (gameOver) return true;
     const [row, col] = selectedCell;
     return selectedCell[0] < 0 || (fixed[row]?.[col] ?? false);
   };
@@ -76,6 +88,8 @@ export function useSudokuGame(puzzle: Puzzle) {
 
   return {
     userInputs,
+    mistakes,
+    gameOver,
     selectedCell,
     solution,
     fixed,
