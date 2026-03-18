@@ -34,7 +34,9 @@ function App() {
       />
       <Keyboard
         disabled={game.isKeyboardDisabled()}
+        eraseDisabled={game.isEraseDisabled()}
         onKeyPress={game.assignValue}
+        onErase={game.eraseValue}
       />
       {game.gameOver && (
         <div className="endgame-overlay">

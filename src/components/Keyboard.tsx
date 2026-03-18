@@ -2,10 +2,17 @@ import { SUDOKU_DIGITS } from '@/constants';
 
 interface KeyboardProps {
   disabled: boolean;
+  eraseDisabled: boolean;
   onKeyPress: (value: number) => void;
+  onErase: () => void;
 }
 
-export function Keyboard({ disabled, onKeyPress }: KeyboardProps) {
+export function Keyboard({
+  disabled,
+  eraseDisabled,
+  onKeyPress,
+  onErase,
+}: KeyboardProps) {
   return (
     <div className="keyboard">
       {SUDOKU_DIGITS.map((key) => (
@@ -17,6 +24,15 @@ export function Keyboard({ disabled, onKeyPress }: KeyboardProps) {
           {key}
         </button>
       ))}
+      <button
+        className="keyboard-erase"
+        disabled={eraseDisabled}
+        onClick={onErase}
+        title="Erase"
+        aria-label="Erase"
+      >
+        Erase
+      </button>
     </div>
   );
 }
