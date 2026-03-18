@@ -1,14 +1,14 @@
-import '@/components/Board.css';
-import { Cell } from './Cell';
-import type { CellPosition } from '@/types';
+import '@/components/Board.css'
+import { Cell } from './Cell'
+import type { CellPosition } from '@/types'
 
 interface BoardProps {
-  getCellValue: (row: number, col: number) => number;
-  getCellValidation: (row: number, col: number) => boolean | null;
-  isCross: (pos: CellPosition) => boolean;
-  isBlock: (pos: CellPosition) => boolean;
-  isSelected: (pos: CellPosition) => boolean;
-  onSelectCell: (pos: CellPosition) => void;
+  getCellValue: (row: number, col: number) => number
+  getCellValidation: (row: number, col: number) => boolean | null
+  isCross: (pos: CellPosition) => boolean
+  isBlock: (pos: CellPosition) => boolean
+  isSelected: (pos: CellPosition) => boolean
+  onSelectCell: (pos: CellPosition) => void
 }
 
 export function Board({
@@ -24,11 +24,10 @@ export function Board({
       {Array.from({ length: 9 }, (_, rowIndex) => (
         <div className="board-row" key={rowIndex}>
           {Array.from({ length: 9 }, (_, cellIndex) => {
-            const pos: CellPosition = [rowIndex, cellIndex];
-            const value = getCellValue(rowIndex, cellIndex);
-            const validation = getCellValidation(rowIndex, cellIndex);
-            const isIncorrect = validation === false;
-
+            const pos: CellPosition = [rowIndex, cellIndex]
+            const value = getCellValue(rowIndex, cellIndex)
+            const validation = getCellValidation(rowIndex, cellIndex)
+            const isIncorrect = validation === false
             return (
               <Cell
                 key={cellIndex}
@@ -39,10 +38,10 @@ export function Board({
                 isSelected={isSelected(pos)}
                 onSelect={onSelectCell}
               />
-            );
+            )
           })}
         </div>
       ))}
     </div>
-  );
+  )
 }

@@ -1,11 +1,11 @@
-import '@/components/Keyboard.css';
-import { SUDOKU_DIGITS } from '@/constants';
+import '@/components/Keyboard.css'
+import { SUDOKU_DIGITS } from '@/constants'
 
 interface KeyboardProps {
-  disabled: boolean;
-  eraseDisabled: boolean;
-  onKeyPress: (value: number) => void;
-  onErase: () => void;
+  disabled: boolean
+  eraseDisabled: boolean
+  onKeyPress: (value: number) => void
+  onErase: () => void
 }
 
 export function Keyboard({
@@ -35,5 +35,5 @@ export function Keyboard({
         Erase
       </button>
     </div>
-  );
+  )
 }

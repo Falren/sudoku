@@ -1,12 +1,12 @@
-import type { CellPosition } from '@/types';
+import type { CellPosition } from '@/types'
 
 interface CellProps {
-  position: CellPosition;
-  value: number;
-  isIncorrect: boolean;
-  isHighlighted: boolean;
-  isSelected: boolean;
-  onSelect: (pos: CellPosition) => void;
+  position: CellPosition
+  value: number
+  isIncorrect: boolean
+  isHighlighted: boolean
+  isSelected: boolean
+  onSelect: (pos: CellPosition) => void
 }
 
 export function Cell({
@@ -24,8 +24,7 @@ export function Cell({
     isIncorrect && 'incorrect',
   ]
     .filter(Boolean)
-    .join(' ');
-
+    .join(' ')
   return (
     <span
       className={cellClass}
@@ -35,5 +34,5 @@ export function Cell({
     >
       {value || ''}
     </span>
-  );
+  )
 }

@@ -1,15 +1,14 @@
-export type CellPosition = [number, number];
-
+export type CellPosition = [number, number]
 export interface Puzzle {
-  id: number;
-  board: number[][];
-  solution: number[][];
-  clues: number;
+  id: number
+  board: number[][]
+  solution: number[][]
+  clues: number
 }
 
 export interface UserInput {
-  value: number;
-  isCorrect: boolean;
+  value: number
+  isCorrect: boolean
 }
 
-export type UserInputsMap = Map<string, UserInput>;
+export type UserInputsMap = Map<string, UserInput>

@@ -1,9 +1,6 @@
-import type { CellPosition } from '@/types';
+import type { CellPosition } from '@/types'
 
-export const SUDOKU_DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
-
-export const NO_SELECTION: CellPosition = [-1, -1];
-
-export const MAX_MISTAKES = 3;
-
-export const ERASE_KEY = 'Backspace';
+export const SUDOKU_DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const
+export const NO_SELECTION: CellPosition = [-1, -1]
+export const MAX_MISTAKES = 3
+export const ERASE_KEY = 'Backspace'

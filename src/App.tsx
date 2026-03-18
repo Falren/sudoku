@@ -1,21 +1,18 @@
-import { useState, useMemo } from 'react';
-import '@/App.css';
-import { puzzles } from '@/data';
-import { Board, Keyboard } from '@/components';
-import { useSudokuGame } from '@/hooks';
-import { MAX_MISTAKES } from '@/constants';
-import { RefreshIcon } from '@/assets/icons';
-
+import { useState, useMemo } from 'react'
+import '@/App.css'
+import { puzzles } from '@/data'
+import { Board, Keyboard } from '@/components'
+import { useSudokuGame } from '@/hooks'
+import { MAX_MISTAKES } from '@/constants'
+import { RefreshIcon } from '@/assets/icons'
 function App() {
-  const [puzzleKey, setPuzzleKey] = useState(0);
+  const [puzzleKey, setPuzzleKey] = useState(0)
   const puzzle = useMemo(
     () => puzzles[Math.floor(Math.random() * puzzles.length)],
     [puzzleKey]
-  );
-
-  const game = useSudokuGame(puzzle);
-  const loadNewPuzzle = () => setPuzzleKey((k) => k + 1);
-
+  )
+  const game = useSudokuGame(puzzle)
+  const loadNewPuzzle = () => setPuzzleKey((k) => k + 1)
   return (
     <div className="main">
       <div className="header">
@@ -49,7 +46,7 @@ function App() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

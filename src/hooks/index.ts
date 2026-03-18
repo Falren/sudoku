@@ -1,1 +1,1 @@
-export { useSudokuGame } from './useSudokuGame';
+export { useSudokuGame } from './useSudokuGame'

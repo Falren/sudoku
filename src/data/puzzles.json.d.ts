@@ -1,8 +1,8 @@
-import type { Puzzle } from '@/types';
+import type { Puzzle } from '@/types'
 
 declare const puzzlesData: {
-  puzzles: Puzzle[];
-  count: number;
-};
+  puzzles: Puzzle[]
+  count: number
+}
 
-export default puzzlesData;
+export default puzzlesData
