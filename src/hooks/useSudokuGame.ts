@@ -1,13 +1,15 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import type { Puzzle, CellPosition, UserInputsMap } from '@/types';
-import { cellKey } from '@/utils';
-import { MAX_MISTAKES, ERASE_KEY } from '@/constants';
+import { cellKey, isCross as isCrossUtil, isBlock as isBlockUtil, isSelected as isSelectedUtil } from '@/utils';
+import { MAX_MISTAKES } from '@/constants';
+import { useSudokuKeyboard } from './useSudokuKeyboard';
 
 export function useSudokuGame(puzzle: Puzzle) {
   const [userInputs, setUserInputs] = useState<UserInputsMap>(new Map());
   const [selectedCell, setSelectedCell] = useState<CellPosition>([-1, -1]);
   const [mistakes, setMistakes] = useState(0);
   const gameOver = mistakes >= MAX_MISTAKES;
+
   useEffect(() => {
     setUserInputs(new Map());
     setSelectedCell([-1, -1]);
@@ -20,21 +22,23 @@ export function useSudokuGame(puzzle: Puzzle) {
   );
 
   const fixed = useMemo(
-    () =>
-      puzzle.board.map((row) => row.map((cell) => cell !== 0)),
+    () => puzzle.board.map((row) => row.map((cell) => cell !== 0)),
     [puzzle.board]
   );
-  
-  const selectCell = (pos: CellPosition) => setSelectedCell(pos);
-  
-  const assignValue = (value: number) => {
-    if (gameOver) return;
-    const [row, col] = selectedCell;
-    if (fixed[row][col]) return;
 
+  const selectCell = (pos: CellPosition) => setSelectedCell(pos);
+
+  const canEditSelected = (): boolean => {
+    if (gameOver) return false;
+    const [row, col] = selectedCell;
+    return selectedCell[0] >= 0 && !fixed[row][col];
+  };
+
+  const assignValue = (value: number) => {
+    if (!canEditSelected()) return;
+    const [row, col] = selectedCell;
     const isCorrect = solution[row][col] === value;
     if (!isCorrect) setMistakes((prev) => prev + 1);
-
     setUserInputs((prev) => {
       const updated = new Map(prev);
       updated.set(cellKey(row, col), { value, isCorrect });
@@ -43,19 +47,16 @@ export function useSudokuGame(puzzle: Puzzle) {
   };
 
   const eraseValue = () => {
-    if (gameOver) return;
-    
+    if (!canEditSelected()) return;
     const [row, col] = selectedCell;
-    if (fixed[row][col]) return;
     if (!userInputs.has(cellKey(row, col))) return;
-
     setUserInputs((prev) => {
       const updated = new Map(prev);
       updated.delete(cellKey(row, col));
       return updated;
     });
   };
-  
+
   const getCellValue = (row: number, col: number): number => {
     const input = userInputs.get(cellKey(row, col));
     return input ? input.value : puzzle.board[row][col];
@@ -65,36 +66,10 @@ export function useSudokuGame(puzzle: Puzzle) {
     const input = userInputs.get(cellKey(row, col));
     return input ? input.isCorrect : null;
   };
-  
-  const isCross = (pos: CellPosition): boolean =>
-    selectedCell[0] === pos[0] || selectedCell[1] === pos[1];
 
-  const isBlock = (pos: CellPosition): boolean => {
-    const [row, col] = pos;
-    return (
-      Math.floor(row / 3) === Math.floor(selectedCell[0] / 3) &&
-      Math.floor(col / 3) === Math.floor(selectedCell[1] / 3)
-    );
-  };
-  
-  const isSelected = (pos: CellPosition): boolean =>
-    selectedCell[0] === pos[0] && selectedCell[1] === pos[1];
-  
-  const isKeyboardDisabled = (): boolean => {
-    if (gameOver) return true;
-    const [row, col] = selectedCell;
-    return selectedCell[0] < 0 || (fixed[row]?.[col] ?? false);
-  };
-
-  const isEraseDisabled = (): boolean => {
-    if (gameOver) return true;
-    const [row, col] = selectedCell;
-    return (
-      selectedCell[0] < 0 ||
-      (fixed[row]?.[col] ?? false) ||
-      !userInputs.has(cellKey(row, col))
-    );
-  };
+  const isKeyboardDisabled = (): boolean => !canEditSelected();
+  const isEraseDisabled = (): boolean =>
+    isKeyboardDisabled() || !userInputs.has(cellKey(selectedCell[0], selectedCell[1]));
 
   const handlersRef = useRef({
     assignValue,
@@ -109,18 +84,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     isEraseDisabled,
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const { assignValue, eraseValue, isKeyboardDisabled, isEraseDisabled } = handlersRef.current;
-      const isEraseKey = e.key === ERASE_KEY;
-      if (isEraseKey && !isEraseDisabled()) eraseValue();
-      if (isKeyboardDisabled() || isEraseKey) return;
-      const num = parseInt(e.key, 10);
-      if (num >= 1 && num <= 9) assignValue(num);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  useSudokuKeyboard(handlersRef);
 
   return {
     userInputs,
@@ -134,9 +98,9 @@ export function useSudokuGame(puzzle: Puzzle) {
     eraseValue,
     getCellValue,
     getCellValidation,
-    isCross,
-    isBlock,
-    isSelected,
+    isCross: (pos: CellPosition) => isCrossUtil(selectedCell, pos),
+    isBlock: (pos: CellPosition) => isBlockUtil(selectedCell, pos),
+    isSelected: (pos: CellPosition) => isSelectedUtil(selectedCell, pos),
     isKeyboardDisabled,
     isEraseDisabled,
   };

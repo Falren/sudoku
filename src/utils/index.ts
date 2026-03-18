@@ -1,5 +1,7 @@
 import type { CellPosition } from '@/types';
 
+export { isCross, isBlock, isSelected } from './cellHelpers';
+
 export function cellKey(row: number, col: number): string {
   return `${row},${col}`;
 }
