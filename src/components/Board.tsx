@@ -1,3 +1,4 @@
+import '@/components/Board.css';
 import { Cell } from './Cell';
 import type { CellPosition } from '@/types';
 

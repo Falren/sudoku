@@ -1,0 +1,59 @@
+.board {
+  --selected: #333;
+  --border-thin: 1px solid #ccc;
+  --border-thick: 1px solid #444;
+  display: flex;
+  flex-direction: column;
+  width: min(90vw, 90dvh, 500px);
+  aspect-ratio: 1;
+  border: var(--border-thick);
+  padding: 2px;
+}
+
+.board-row {
+  display: flex;
+  flex: 1;
+}
+
+.board-row .cell {
+  border-right: var(--border-thin);
+  border-bottom: var(--border-thin);
+}
+
+.board-row:nth-child(3n) .cell {
+  border-bottom: var(--border-thick);
+}
+
+.board-row:last-child .cell {
+  border-bottom: none;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 1;
+  font-size: 1.2em;
+}
+
+.cell.highlightArea {
+  background-color: var(--selected);
+}
+
+.cell.selectedCell {
+  background-color: #555;
+}
+
+.cell:nth-child(3n) {
+  border-right: var(--border-thick);
+}
+
+.cell:last-child {
+  border-right: none;
+}
+
+.cell.incorrect {
+  color: red;
+}

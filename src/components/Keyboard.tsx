@@ -1,3 +1,4 @@
+import '@/components/Keyboard.css';
 import { SUDOKU_DIGITS } from '@/constants';
 
 interface KeyboardProps {
