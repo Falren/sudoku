@@ -1,10 +1,9 @@
 import { useState, useMemo } from 'react'
 import '@/App.css'
 import { puzzles } from '@/data'
-import { Board, Keyboard } from '@/components'
+import { Board, Keyboard, Timer } from '@/components'
 import { useSudokuGame } from '@/hooks'
 import { MAX_MISTAKES } from '@/constants'
-import { formatElapsedSeconds } from '@/utils'
 import { RefreshIcon } from '@/assets/icons'
 function App() {
   const [puzzleKey, setPuzzleKey] = useState(0)
@@ -17,9 +16,12 @@ function App() {
   return (
     <div className="main">
       <div className="header">
-        <div className="timer">
-          {formatElapsedSeconds(game.elapsedSeconds)}
-        </div>
+        <Timer
+          elapsedSeconds={game.elapsedSeconds}
+          timerStopped={game.timerStopped}
+          gameOver={game.gameOver}
+          onToggleTimer={game.toggleTimer}
+        />
         <div className="mistakes">Mistakes: {game.mistakes} / {MAX_MISTAKES}</div>
         <button className="redo-button" onClick={loadNewPuzzle} title="New Game" aria-label="New Game">
           <RefreshIcon />

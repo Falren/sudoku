@@ -8,20 +8,22 @@ export function useSudokuGame(puzzle: Puzzle) {
   const [selectedCell, setSelectedCell] = useState<CellPosition>([-1, -1])
   const [mistakes, setMistakes] = useState(0)
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
+  const [timerStopped, setTimerStopped] = useState(false)
   const gameOver = mistakes >= MAX_MISTAKES
   useEffect(() => {
     setUserInputs(new Map())
     setSelectedCell([-1, -1])
     setMistakes(0)
     setElapsedSeconds(0)
+    setTimerStopped(false)
   }, [puzzle])
   useEffect(() => {
-    if (gameOver) return
+    if (gameOver || timerStopped) return
     const id = window.setInterval(() => {
       setElapsedSeconds((s) => s + 1)
     }, 1000)
     return () => window.clearInterval(id)
-  }, [gameOver, puzzle])
+  }, [gameOver, puzzle, timerStopped])
   const solution = useMemo(
     () => puzzle.solution.map((row) => [...row]),
     [puzzle.solution]
@@ -81,10 +83,16 @@ export function useSudokuGame(puzzle: Puzzle) {
     isEraseDisabled,
   }
   useSudokuKeyboard(handlersRef)
+  const toggleTimer = () => {
+    if (gameOver) return
+    setTimerStopped((s) => !s)
+  }
   return {
     userInputs,
     mistakes,
     elapsedSeconds,
+    timerStopped,
+    toggleTimer,
     gameOver,
     selectedCell,
     solution,
