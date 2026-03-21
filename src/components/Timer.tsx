@@ -6,10 +6,11 @@ interface TimerProps {
   elapsedSeconds: number
   timerStopped: boolean
   gameOver: boolean
+  won: boolean
   onToggleTimer: () => void
 }
 
-export function Timer({ elapsedSeconds, timerStopped, gameOver, onToggleTimer }: TimerProps) {
+export function Timer({ elapsedSeconds, timerStopped, gameOver, won, onToggleTimer }: TimerProps) {
   return (
     <div className="timer-row">
       <div className="timer">{formatElapsedSeconds(elapsedSeconds)}</div>
@@ -17,7 +18,7 @@ export function Timer({ elapsedSeconds, timerStopped, gameOver, onToggleTimer }:
         type="button"
         className="redo-button timer-toggle"
         onClick={onToggleTimer}
-        disabled={gameOver}
+        disabled={gameOver || won}
       >
         {timerStopped ? <PlayIcon /> : <PauseIcon />}
       </button>

@@ -4,6 +4,7 @@ import { puzzles } from '@/data'
 import { Board, Keyboard, Timer } from '@/components'
 import { useSudokuGame } from '@/hooks'
 import { MAX_MISTAKES } from '@/constants'
+import { formatElapsedSeconds } from '@/utils'
 import { RefreshIcon } from '@/assets/icons'
 function App() {
   const [puzzleKey, setPuzzleKey] = useState(0)
@@ -20,6 +21,7 @@ function App() {
           elapsedSeconds={game.elapsedSeconds}
           timerStopped={game.timerStopped}
           gameOver={game.gameOver}
+          won={game.won}
           onToggleTimer={game.toggleTimer}
         />
         <div className="mistakes">Mistakes: {game.mistakes} / {MAX_MISTAKES}</div>
@@ -45,6 +47,17 @@ function App() {
         <div className="endgame-overlay">
           <div className="endgame-message">
             <div>Game Over</div>
+            <button className="redo-button" onClick={loadNewPuzzle} title="New Game" aria-label="New Game">
+              New Game
+            </button>
+          </div>
+        </div>
+      )}
+      {game.won && !game.gameOver && (
+        <div className="endgame-overlay">
+          <div className="endgame-message endgame-message--win">
+            <div>You solved it!</div>
+            <div className="endgame-sub">Time {formatElapsedSeconds(game.elapsedSeconds)}</div>
             <button className="redo-button" onClick={loadNewPuzzle} title="New Game" aria-label="New Game">
               New Game
             </button>

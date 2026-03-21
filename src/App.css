@@ -77,3 +77,13 @@
 .endgame-message .redo-button:hover {
   background: #555;
 }
+
+.endgame-message-win {
+  border: 1px solid rgba(120, 200, 140, 0.45);
+}
+
+.endgame-sub {
+  font-size: 1rem;
+  color: #bbb;
+  font-variant-numeric: tabular-nums;
+}
