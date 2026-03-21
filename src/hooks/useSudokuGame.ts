@@ -1,22 +1,16 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import type { Puzzle, CellPosition, UserInputsMap } from '@/types'
-import { cellKey, isCross as isCrossUtil, isBlock as isBlockUtil, isSelected as isSelectedUtil } from '@/utils'
+import { cellKey, isGridSolved, isCross, isBlock, isSelected } from '@/utils'
 import { MAX_MISTAKES } from '@/constants'
 import { useSudokuKeyboard } from './useSudokuKeyboard'
+
 export function useSudokuGame(puzzle: Puzzle) {
   const [userInputs, setUserInputs] = useState<UserInputsMap>(new Map())
   const [selectedCell, setSelectedCell] = useState<CellPosition>([-1, -1])
   const [mistakes, setMistakes] = useState(0)
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const [timerStopped, setTimerStopped] = useState(false)
-  const gameOver = mistakes >= MAX_MISTAKES
-  useEffect(() => {
-    setUserInputs(new Map())
-    setSelectedCell([-1, -1])
-    setMistakes(0)
-    setElapsedSeconds(0)
-    setTimerStopped(false)
-  }, [puzzle])
+
   const solution = useMemo(
     () => puzzle.solution.map((row) => [...row]),
     [puzzle.solution]
@@ -25,16 +19,21 @@ export function useSudokuGame(puzzle: Puzzle) {
     () => puzzle.board.map((row) => row.map((cell) => cell !== 0)),
     [puzzle.board]
   )
-  const won = useMemo(() => {
-    for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
-      for (let colIndex = 0; colIndex < 9; colIndex++) {
-        const input = userInputs.get(cellKey(rowIndex, colIndex))
-        const value = input ? input.value : puzzle.board[rowIndex][colIndex]
-        if (value !== solution[rowIndex][colIndex]) return false
-      }
-    }
-    return true
-  }, [userInputs, puzzle.board, solution])
+
+  const gameOver = mistakes >= MAX_MISTAKES
+  const won = useMemo(
+    () => isGridSolved(userInputs, puzzle.board, solution),
+    [userInputs, puzzle.board, solution]
+  )
+
+  useEffect(() => {
+    setUserInputs(new Map())
+    setSelectedCell([-1, -1])
+    setMistakes(0)
+    setElapsedSeconds(0)
+    setTimerStopped(false)
+  }, [puzzle])
+
   useEffect(() => {
     if (gameOver || timerStopped || won) return
     const id = window.setInterval(() => {
@@ -42,6 +41,12 @@ export function useSudokuGame(puzzle: Puzzle) {
     }, 1000)
     return () => window.clearInterval(id)
   }, [gameOver, puzzle, timerStopped, won])
+
+  const toggleTimer = () => {
+    if (gameOver || won) return
+    setTimerStopped((s) => !s)
+  }
+
   const selectCell = (pos: CellPosition) => setSelectedCell(pos)
   const canEditSelected = (): boolean => {
     if (gameOver || won) return false
@@ -93,10 +98,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     isEraseDisabled,
   }
   useSudokuKeyboard(handlersRef)
-  const toggleTimer = () => {
-    if (gameOver || won) return
-    setTimerStopped((s) => !s)
-  }
+
   return {
     userInputs,
     mistakes,
@@ -113,9 +115,9 @@ export function useSudokuGame(puzzle: Puzzle) {
     eraseValue,
     getCellValue,
     getCellValidation,
-    isCross: (pos: CellPosition) => isCrossUtil(selectedCell, pos),
-    isBlock: (pos: CellPosition) => isBlockUtil(selectedCell, pos),
-    isSelected: (pos: CellPosition) => isSelectedUtil(selectedCell, pos),
+    isCross: (pos: CellPosition) => isCross(selectedCell, pos),
+    isBlock: (pos: CellPosition) => isBlock(selectedCell, pos),
+    isSelected: (pos: CellPosition) => isSelected(selectedCell, pos),
     isKeyboardDisabled,
     isEraseDisabled,
   }
