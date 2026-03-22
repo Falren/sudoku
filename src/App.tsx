@@ -42,14 +42,21 @@ function App() {
           <RefreshIcon />
         </button>
       </div>
-      <Board
-        getCellValue={game.getCellValue}
-        getCellValidation={game.getCellValidation}
-        isCross={game.isCross}
-        isBlock={game.isBlock}
-        isSelected={game.isSelected}
-        onSelectCell={game.selectCell}
-      />
+      <div className="board-shell">
+        <Board
+          getCellValue={game.getCellValue}
+          getCellValidation={game.getCellValidation}
+          isCross={game.isCross}
+          isBlock={game.isBlock}
+          isSelected={game.isSelected}
+          onSelectCell={game.selectCell}
+        />
+        {game.timerStopped && !game.gameOver && !game.won && (
+          <div className="board-pause-overlay" role="status" aria-live="polite">
+            <span className="board-pause-caption">Pause</span>
+          </div>
+        )}
+      </div>
       <Keyboard
         disabled={game.isKeyboardDisabled()}
         eraseDisabled={game.isEraseDisabled()}

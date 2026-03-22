@@ -49,7 +49,7 @@ export function useSudokuGame(puzzle: Puzzle) {
 
   const selectCell = (pos: CellPosition) => setSelectedCell(pos)
   const canEditSelected = (): boolean => {
-    if (gameOver || won) return false
+    if (gameOver || won || timerStopped) return false
     const [row, col] = selectedCell
     return selectedCell[0] >= 0 && !fixed[row][col]
   }
