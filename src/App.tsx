@@ -1,19 +1,31 @@
-import { useState, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+
 import '@/App.css'
-import { puzzles } from '@/data'
-import { Board, Keyboard, Timer } from '@/components'
-import { useSudokuGame } from '@/hooks'
-import { MAX_MISTAKES } from '@/constants'
-import { formatElapsedSeconds } from '@/utils'
+
 import { RefreshIcon } from '@/assets/icons'
+import { Board, DifficultySelector, Keyboard, Timer } from '@/components'
+import { MAX_MISTAKES } from '@/constants'
+import { puzzles } from '@/data'
+import { useSudokuGame } from '@/hooks'
+
+import type { Difficulty } from '@/types'
+
+import { formatElapsedSeconds, getPuzzlesForDifficulty } from '@/utils'
+
 function App() {
   const [puzzleKey, setPuzzleKey] = useState(0)
-  const puzzle = useMemo(
-    () => puzzles[Math.floor(Math.random() * puzzles.length)],
-    [puzzleKey]
-  )
+  const [difficulty, setDifficulty] = useState<Difficulty>('medium')
+  const puzzle = useMemo(() => {
+    const pool = getPuzzlesForDifficulty(puzzles, difficulty)
+    const list = pool.length > 0 ? pool : puzzles
+    return list[Math.floor(Math.random() * list.length)]
+  }, [puzzleKey, difficulty])
   const game = useSudokuGame(puzzle)
   const loadNewPuzzle = () => setPuzzleKey((k) => k + 1)
+  const onDifficultyChange = useCallback((next: Difficulty) => {
+    setDifficulty(next)
+    setPuzzleKey((k) => k + 1)
+  }, [])
   return (
     <div className="main">
       <div className="header">
@@ -25,6 +37,7 @@ function App() {
           onToggleTimer={game.toggleTimer}
         />
         <div className="mistakes">Mistakes: {game.mistakes} / {MAX_MISTAKES}</div>
+        <DifficultySelector value={difficulty} onChange={onDifficultyChange} />
         <button className="redo-button" onClick={loadNewPuzzle} title="New Game" aria-label="New Game">
           <RefreshIcon />
         </button>
@@ -55,7 +68,7 @@ function App() {
       )}
       {game.won && !game.gameOver && (
         <div className="endgame-overlay">
-          <div className="endgame-message endgame-message--win">
+          <div className="endgame-message endgame-message-win">
             <div>You solved it!</div>
             <div className="endgame-sub">Time {formatElapsedSeconds(game.elapsedSeconds)}</div>
             <button className="redo-button" onClick={loadNewPuzzle} title="New Game" aria-label="New Game">

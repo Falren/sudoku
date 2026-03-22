@@ -1,6 +1,7 @@
 export { isCross, isBlock, isSelected } from './cellHelpers'
 export { cellKey, parseCellKey } from './cellKey'
 export { isGridSolved } from './isGridSolved'
+export { getPuzzlesForDifficulty } from './puzzleDifficulty'
 
 export function formatElapsedSeconds(total: number): string {
   const minutes = Math.floor(total / 60)

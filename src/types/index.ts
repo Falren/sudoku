@@ -1,6 +1,8 @@
 export type CellPosition = [number, number]
+export type Difficulty = 'easy' | 'medium' | 'hard'
 export interface Puzzle {
   id: number
+  difficulty: Difficulty
   board: number[][]
   solution: number[][]
   clues: number
