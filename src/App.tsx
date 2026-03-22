@@ -2,15 +2,13 @@ import { useCallback, useMemo, useState } from 'react'
 
 import '@/App.css'
 
-import { RefreshIcon } from '@/assets/icons'
-import { Board, DifficultySelector, Keyboard, Timer } from '@/components'
-import { MAX_MISTAKES } from '@/constants'
+import { BoardPanel, EndgameOverlay, GameHeader, GameLayout, Keyboard } from '@/components'
 import { puzzles } from '@/data'
 import { useSudokuGame } from '@/hooks'
 
 import type { Difficulty } from '@/types'
 
-import { formatElapsedSeconds, getPuzzlesForDifficulty } from '@/utils'
+import { getPuzzlesForDifficulty } from '@/utils'
 
 function App() {
   const [puzzleKey, setPuzzleKey] = useState(0)
@@ -26,65 +24,40 @@ function App() {
     setDifficulty(next)
     setPuzzleKey((k) => k + 1)
   }, [])
+  const endgameVariant = game.gameOver ? 'gameOver' : game.won ? 'win' : null
+  const boardProps = {
+    getCellValue: game.getCellValue,
+    getCellValidation: game.getCellValidation,
+    isCross: game.isCross,
+    isBlock: game.isBlock,
+    isSelected: game.isSelected,
+    onSelectCell: game.selectCell,
+  }
   return (
-    <div className="main">
-      <div className="header">
-        <Timer
-          elapsedSeconds={game.elapsedSeconds}
-          timerStopped={game.timerStopped}
-          gameOver={game.gameOver}
-          won={game.won}
-          onToggleTimer={game.toggleTimer}
-        />
-        <div className="mistakes">Mistakes: {game.mistakes} / {MAX_MISTAKES}</div>
-        <DifficultySelector value={difficulty} onChange={onDifficultyChange} />
-        <button className="redo-button" onClick={loadNewPuzzle} title="New Game" aria-label="New Game">
-          <RefreshIcon />
-        </button>
-      </div>
-      <div className="board-shell">
-        <Board
-          getCellValue={game.getCellValue}
-          getCellValidation={game.getCellValidation}
-          isCross={game.isCross}
-          isBlock={game.isBlock}
-          isSelected={game.isSelected}
-          onSelectCell={game.selectCell}
-        />
-        {game.timerStopped && !game.gameOver && !game.won && (
-          <div className="board-pause-overlay" role="status" aria-live="polite">
-            <span className="board-pause-caption">Pause</span>
-          </div>
-        )}
-      </div>
+    <GameLayout>
+      <GameHeader
+        difficulty={difficulty}
+        mistakes={game.mistakes}
+        elapsedSeconds={game.elapsedSeconds}
+        timerStopped={game.timerStopped}
+        gameOver={game.gameOver}
+        won={game.won}
+        onDifficultyChange={onDifficultyChange}
+        onNewGame={loadNewPuzzle}
+        onToggleTimer={game.toggleTimer}
+      />
+      <BoardPanel
+        board={boardProps}
+        showPauseOverlay={game.timerStopped && !game.gameOver && !game.won}
+      />
       <Keyboard
         disabled={game.isKeyboardDisabled()}
         eraseDisabled={game.isEraseDisabled()}
         onKeyPress={game.assignValue}
         onErase={game.eraseValue}
       />
-      {game.gameOver && (
-        <div className="endgame-overlay">
-          <div className="endgame-message">
-            <div>Game Over</div>
-            <button className="redo-button" onClick={loadNewPuzzle} title="New Game" aria-label="New Game">
-              New Game
-            </button>
-          </div>
-        </div>
-      )}
-      {game.won && !game.gameOver && (
-        <div className="endgame-overlay">
-          <div className="endgame-message endgame-message-win">
-            <div>You solved it!</div>
-            <div className="endgame-sub">Time {formatElapsedSeconds(game.elapsedSeconds)}</div>
-            <button className="redo-button" onClick={loadNewPuzzle} title="New Game" aria-label="New Game">
-              New Game
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+      <EndgameOverlay variant={endgameVariant} elapsedSeconds={game.elapsedSeconds} onNewGame={loadNewPuzzle} />
+    </GameLayout>
   )
 }
 

@@ -2,7 +2,7 @@ import '@/components/Board.css'
 import { Cell } from './Cell'
 import type { CellPosition } from '@/types'
 
-interface BoardProps {
+export interface BoardProps {
   getCellValue: (row: number, col: number) => number
   getCellValidation: (row: number, col: number) => boolean | null
   isCross: (pos: CellPosition) => boolean
