@@ -15,7 +15,7 @@ export function EndgameOverlay({ variant, elapsedSeconds, onNewGame }: EndgameOv
       <div className="endgame-overlay">
         <div className="endgame-message">
           <div>Game Over</div>
-          <button className="redo-button" onClick={onNewGame} title="New Game" aria-label="New Game">
+          <button className="redo-button" onClick={onNewGame} title="New Game">
             New Game
           </button>
         </div>
@@ -27,7 +27,7 @@ export function EndgameOverlay({ variant, elapsedSeconds, onNewGame }: EndgameOv
       <div className="endgame-message endgame-message-win">
         <div>You solved it!</div>
         <div className="endgame-sub">Time {formatElapsedSeconds(elapsedSeconds)}</div>
-        <button className="redo-button" onClick={onNewGame} title="New Game" aria-label="New Game">
+        <button className="redo-button" onClick={onNewGame} title="New Game">
           New Game
         </button>
       </div>

@@ -66,9 +66,14 @@
   justify-content: center;
 }
 
-.redo-button:hover {
+.redo-button:hover:not(:disabled) {
   color: #fff;
   background: #444;
+}
+
+.redo-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .redo-button svg {

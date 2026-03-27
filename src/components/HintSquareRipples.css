@@ -1,0 +1,44 @@
+/* Concentric square ripples — two-tone stagger (square analogue of circle ripple demos) */
+
+.hint-square-svg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220%;
+  height: 220%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+  color: #dfdfc4;
+}
+
+.hint-square-layer {
+  color: #dfdfc4;
+}
+
+.hint-square-layer--1 {
+  color: #262626;
+}
+
+.hint-square-anim {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hint-square-expand 3s linear forwards;
+}
+
+@keyframes hint-square-expand {
+  0% {
+    transform: scale(0.22);
+    opacity: 0.92;
+  }
+  100% {
+    transform: scale(8.5);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hint-square-svg {
+    display: none;
+  }
+}

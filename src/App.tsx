@@ -19,10 +19,10 @@ function App() {
     return list[Math.floor(Math.random() * list.length)]
   }, [puzzleKey, difficulty])
   const game = useSudokuGame(puzzle)
-  const loadNewPuzzle = () => setPuzzleKey((k) => k + 1)
+  const loadNewPuzzle = () => setPuzzleKey((previousKey) => previousKey + 1)
   const onDifficultyChange = useCallback((next: Difficulty) => {
     setDifficulty(next)
-    setPuzzleKey((k) => k + 1)
+    setPuzzleKey((previousKey) => previousKey + 1)
   }, [])
   const endgameVariant = game.gameOver ? 'gameOver' : game.won ? 'win' : null
   const boardProps = {
@@ -31,6 +31,7 @@ function App() {
     isCross: game.isCross,
     isBlock: game.isBlock,
     isSelected: game.isSelected,
+    isHintFlash: game.isHintFlash,
     onSelectCell: game.selectCell,
   }
   return (
@@ -45,6 +46,9 @@ function App() {
         onDifficultyChange={onDifficultyChange}
         onNewGame={loadNewPuzzle}
         onToggleTimer={game.toggleTimer}
+        hintsRemaining={game.hintsRemaining}
+        onHint={game.applyHint}
+        hintDisabled={game.isHintDisabled()}
       />
       <BoardPanel
         board={boardProps}

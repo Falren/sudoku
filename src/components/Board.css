@@ -29,6 +29,7 @@
 }
 
 .cell {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,6 +37,7 @@
   min-width: 0;
   aspect-ratio: 1;
   font-size: 1.2em;
+  overflow: visible;
 }
 
 .cell.highlightArea {

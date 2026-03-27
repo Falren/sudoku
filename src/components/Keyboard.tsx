@@ -30,7 +30,6 @@ export function Keyboard({
         disabled={eraseDisabled}
         onClick={onErase}
         title="Erase"
-        aria-label="Erase"
       >
         Erase
       </button>

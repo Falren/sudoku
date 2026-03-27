@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import type { Puzzle, CellPosition, UserInputsMap } from '@/types'
 import { cellKey, isGridSolved, isCross, isBlock, isSelected } from '@/utils'
-import { MAX_MISTAKES } from '@/constants'
+import { MAX_HINTS, MAX_MISTAKES } from '@/constants'
 import { useSudokuKeyboard } from './useSudokuKeyboard'
 
 export function useSudokuGame(puzzle: Puzzle) {
@@ -10,6 +10,8 @@ export function useSudokuGame(puzzle: Puzzle) {
   const [mistakes, setMistakes] = useState(0)
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const [timerStopped, setTimerStopped] = useState(false)
+  const [hintsUsed, setHintsUsed] = useState(0)
+  const [hintFlashCell, setHintFlashCell] = useState<CellPosition | null>(null)
 
   const solution = useMemo(
     () => puzzle.solution.map((row) => [...row]),
@@ -32,19 +34,27 @@ export function useSudokuGame(puzzle: Puzzle) {
     setMistakes(0)
     setElapsedSeconds(0)
     setTimerStopped(false)
+    setHintsUsed(0)
+    setHintFlashCell(null)
   }, [puzzle])
+
+  useEffect(() => {
+    if (!hintFlashCell) return
+    const id = window.setTimeout(() => setHintFlashCell(null), 3100)
+    return () => window.clearTimeout(id)
+  }, [hintFlashCell])
 
   useEffect(() => {
     if (gameOver || timerStopped || won) return
     const id = window.setInterval(() => {
-      setElapsedSeconds((s) => s + 1)
+      setElapsedSeconds((previousSeconds) => previousSeconds + 1)
     }, 1000)
     return () => window.clearInterval(id)
   }, [gameOver, puzzle, timerStopped, won])
 
   const toggleTimer = () => {
     if (gameOver || won) return
-    setTimerStopped((s) => !s)
+    setTimerStopped((previous) => !previous)
   }
 
   const selectCell = (pos: CellPosition) => setSelectedCell(pos)
@@ -74,10 +84,68 @@ export function useSudokuGame(puzzle: Puzzle) {
       return updated
     })
   }
+
   const getCellValue = (row: number, col: number): number => {
     const input = userInputs.get(cellKey(row, col))
     return input ? input.value : puzzle.board[row][col]
   }
+
+  const hintCandidates = (): CellPosition[] => {
+    const candidatePositions: CellPosition[] = []
+    for (let row = 0; row < 9; row++) {
+      for (let column = 0; column < 9; column++) {
+        if (fixed[row][column]) continue
+        if (getCellValue(row, column) !== solution[row][column]) {
+          candidatePositions.push([row, column])
+        }
+      }
+    }
+    return candidatePositions
+  }
+
+  const applyHint = () => {
+    if (gameOver || won || timerStopped) return
+    if (hintsUsed >= MAX_HINTS) return
+    
+    const candidates = hintCandidates()
+    if (candidates.length === 0) return
+    
+    const [selectedRow, selectedColumn] = selectedCell
+    const preferSelected =
+      selectedRow >= 0 &&
+      candidates.some(
+        ([row, column]) => row === selectedRow && column === selectedColumn
+      )
+    let row: number
+    let col: number
+    if (preferSelected) {
+      row = selectedRow
+      col = selectedColumn
+    } else {
+      const pick = candidates[Math.floor(Math.random() * candidates.length)]!
+      row = pick[0]
+      col = pick[1]
+    }
+    const value = solution[row][col]
+    setUserInputs((prev) => {
+      const updated = new Map(prev)
+      updated.set(cellKey(row, col), { value, isCorrect: true })
+      return updated
+    })
+    setHintsUsed((previous) => previous + 1)
+    setHintFlashCell([row, col])
+  }
+
+  const isHintFlash = (pos: CellPosition): boolean =>
+    hintFlashCell !== null && pos[0] === hintFlashCell[0] && pos[1] === hintFlashCell[1]
+
+  const isHintDisabled = (): boolean =>
+    gameOver ||
+    won ||
+    timerStopped ||
+    hintsUsed >= MAX_HINTS ||
+    hintCandidates().length === 0
+
   const getCellValidation = (row: number, col: number): boolean | null => {
     const input = userInputs.get(cellKey(row, col))
     return input ? input.isCorrect : null
@@ -120,5 +188,9 @@ export function useSudokuGame(puzzle: Puzzle) {
     isSelected: (pos: CellPosition) => isSelected(selectedCell, pos),
     isKeyboardDisabled,
     isEraseDisabled,
+    hintsRemaining: MAX_HINTS - hintsUsed,
+    applyHint,
+    isHintDisabled,
+    isHintFlash,
   }
 }

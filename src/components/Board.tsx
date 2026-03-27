@@ -8,6 +8,7 @@ export interface BoardProps {
   isCross: (pos: CellPosition) => boolean
   isBlock: (pos: CellPosition) => boolean
   isSelected: (pos: CellPosition) => boolean
+  isHintFlash: (pos: CellPosition) => boolean
   onSelectCell: (pos: CellPosition) => void
 }
 
@@ -17,6 +18,7 @@ export function Board({
   isCross,
   isBlock,
   isSelected,
+  isHintFlash,
   onSelectCell,
 }: BoardProps) {
   return (
@@ -36,6 +38,7 @@ export function Board({
                 isIncorrect={isIncorrect}
                 isHighlighted={isBlock(pos) || isCross(pos)}
                 isSelected={isSelected(pos)}
+                isHintFlash={isHintFlash(pos)}
                 onSelect={onSelectCell}
               />
             )

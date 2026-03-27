@@ -1,4 +1,4 @@
-import { RefreshIcon } from '@/assets/icons'
+import { HintIcon, RefreshIcon } from '@/assets/icons'
 import { MAX_MISTAKES } from '@/constants'
 import type { Difficulty } from '@/types'
 
@@ -15,6 +15,9 @@ type GameHeaderProps = {
   onDifficultyChange: (next: Difficulty) => void
   onNewGame: () => void
   onToggleTimer: () => void
+  onHint: () => void
+  hintsRemaining: number
+  hintDisabled: boolean
 }
 
 export function GameHeader({
@@ -27,6 +30,9 @@ export function GameHeader({
   onDifficultyChange,
   onNewGame,
   onToggleTimer,
+  hintsRemaining,
+  onHint,
+  hintDisabled,
 }: GameHeaderProps) {
   return (
     <div className="header">
@@ -41,7 +47,16 @@ export function GameHeader({
         Mistakes: {mistakes} / {MAX_MISTAKES}
       </div>
       <DifficultySelector value={difficulty} onChange={onDifficultyChange} />
-      <button className="redo-button" onClick={onNewGame} title="New Game" aria-label="New Game">
+      <button
+        type="button"
+        className="redo-button"
+        onClick={onHint}
+        disabled={hintDisabled}
+        title={`Hint (${hintsRemaining} left)`}
+      >
+        <HintIcon />
+      </button>
+      <button type="button" className="redo-button" onClick={onNewGame} title="New Game">
         <RefreshIcon />
       </button>
     </div>
