@@ -11,7 +11,7 @@ type GameHeaderProps = {
   elapsedSeconds: number
   timerStopped: boolean
   gameOver: boolean
-  won: boolean
+  gameWon: boolean
   onDifficultyChange: (next: Difficulty) => void
   onNewGame: () => void
   onToggleTimer: () => void
@@ -26,7 +26,7 @@ export function GameHeader({
   elapsedSeconds,
   timerStopped,
   gameOver,
-  won,
+  gameWon,
   onDifficultyChange,
   onNewGame,
   onToggleTimer,
@@ -40,7 +40,7 @@ export function GameHeader({
         elapsedSeconds={elapsedSeconds}
         timerStopped={timerStopped}
         gameOver={gameOver}
-        won={won}
+        gameWon={gameWon}
         onToggleTimer={onToggleTimer}
       />
       <div className="mistakes">

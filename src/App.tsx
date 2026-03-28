@@ -24,7 +24,7 @@ function App() {
     setDifficulty(next)
     setPuzzleKey((previousKey) => previousKey + 1)
   }, [])
-  const endgameVariant = game.gameOver ? 'gameOver' : game.won ? 'win' : null
+  const endgameVariant = game.gameOver ? 'loss' : game.gameWon ? 'victory' : null
   const boardProps = {
     getCellValue: game.getCellValue,
     getCellValidation: game.getCellValidation,
@@ -42,7 +42,7 @@ function App() {
         elapsedSeconds={game.elapsedSeconds}
         timerStopped={game.timerStopped}
         gameOver={game.gameOver}
-        won={game.won}
+        gameWon={game.gameWon}
         onDifficultyChange={onDifficultyChange}
         onNewGame={loadNewPuzzle}
         onToggleTimer={game.toggleTimer}
@@ -52,7 +52,7 @@ function App() {
       />
       <BoardPanel
         board={boardProps}
-        showPauseOverlay={game.timerStopped && !game.gameOver && !game.won}
+        showPauseOverlay={game.timerStopped && !game.gameOver && !game.gameWon}
       />
       <Keyboard
         disabled={game.isKeyboardDisabled()}

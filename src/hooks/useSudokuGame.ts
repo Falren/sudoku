@@ -23,7 +23,7 @@ export function useSudokuGame(puzzle: Puzzle) {
   )
 
   const gameOver = mistakes >= MAX_MISTAKES
-  const won = useMemo(
+  const gameWon = useMemo(
     () => isGridSolved(userInputs, puzzle.board, solution),
     [userInputs, puzzle.board, solution]
   )
@@ -45,21 +45,21 @@ export function useSudokuGame(puzzle: Puzzle) {
   }, [hintFlashCell])
 
   useEffect(() => {
-    if (gameOver || timerStopped || won) return
+    if (gameOver || timerStopped || gameWon) return
     const id = window.setInterval(() => {
       setElapsedSeconds((previousSeconds) => previousSeconds + 1)
     }, 1000)
     return () => window.clearInterval(id)
-  }, [gameOver, puzzle, timerStopped, won])
+  }, [gameOver, puzzle, timerStopped, gameWon])
 
   const toggleTimer = () => {
-    if (gameOver || won) return
+    if (gameOver || gameWon) return
     setTimerStopped((previous) => !previous)
   }
 
   const selectCell = (pos: CellPosition) => setSelectedCell(pos)
   const canEditSelected = (): boolean => {
-    if (gameOver || won || timerStopped) return false
+    if (gameOver || gameWon || timerStopped) return false
     const [row, col] = selectedCell
     return selectedCell[0] >= 0 && !fixed[row][col]
   }
@@ -104,7 +104,7 @@ export function useSudokuGame(puzzle: Puzzle) {
   }
 
   const applyHint = () => {
-    if (gameOver || won || timerStopped) return
+    if (gameOver || gameWon || timerStopped) return
     if (hintsUsed >= MAX_HINTS) return
     
     const candidates = hintCandidates()
@@ -141,7 +141,7 @@ export function useSudokuGame(puzzle: Puzzle) {
 
   const isHintDisabled = (): boolean =>
     gameOver ||
-    won ||
+    gameWon ||
     timerStopped ||
     hintsUsed >= MAX_HINTS ||
     hintCandidates().length === 0
@@ -174,7 +174,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     timerStopped,
     toggleTimer,
     gameOver,
-    won,
+    gameWon,
     selectedCell,
     solution,
     fixed,

@@ -1,7 +1,7 @@
 import { formatElapsedSeconds } from '@/utils'
 
 type EndgameOverlayProps = {
-  variant: 'gameOver' | 'win' | null
+  variant: 'loss' | 'victory' | null
   elapsedSeconds: number
   onNewGame: () => void
 }
@@ -10,7 +10,7 @@ export function EndgameOverlay({ variant, elapsedSeconds, onNewGame }: EndgameOv
   if (variant === null) {
     return null
   }
-  if (variant === 'gameOver') {
+  if (variant === 'loss') {
     return (
       <div className="endgame-overlay">
         <div className="endgame-message">
