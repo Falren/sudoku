@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 
 import '@/App.css'
 
-import { BoardPanel, EndgameOverlay, GameHeader, GameLayout, Keyboard } from '@/components'
+import { BoardPanel, EndgameOverlay, GameHeader, GameLayout, GameToolbar, Keyboard } from '@/components'
 import { puzzles } from '@/data'
 import { useSudokuGame } from '@/hooks'
 
@@ -36,32 +36,40 @@ function App() {
   }
   return (
     <GameLayout>
-      <GameHeader
-        difficulty={difficulty}
-        mistakes={game.mistakes}
-        elapsedSeconds={game.elapsedSeconds}
-        timerStopped={game.timerStopped}
-        gameOver={game.gameOver}
-        gameWon={game.gameWon}
-        onDifficultyChange={onDifficultyChange}
-        onNewGame={loadNewPuzzle}
-        onToggleTimer={game.toggleTimer}
-        hintsRemaining={game.hintsRemaining}
-        onHint={game.applyHint}
-        hintDisabled={game.isHintDisabled()}
-        onUndo={game.undoLastMove}
-        undoDisabled={game.isUndoDisabled()}
-      />
-      <BoardPanel
-        board={boardProps}
-        showPauseOverlay={game.timerStopped && !game.gameOver && !game.gameWon}
-      />
-      <Keyboard
-        disabled={game.isKeyboardDisabled()}
-        eraseDisabled={game.isEraseDisabled()}
-        onKeyPress={game.assignValue}
-        onErase={game.eraseValue}
-      />
+      <div className="game-play">
+        <div className="game-board-stack">
+          <GameHeader
+            difficulty={difficulty}
+            onDifficultyChange={onDifficultyChange}
+            elapsedSeconds={game.elapsedSeconds}
+            timerStopped={game.timerStopped}
+            gameOver={game.gameOver}
+            gameWon={game.gameWon}
+            onToggleTimer={game.toggleTimer}
+          />
+          <BoardPanel
+            board={boardProps}
+            showPauseOverlay={game.timerStopped && !game.gameOver && !game.gameWon}
+          />
+        </div>
+        <aside className="game-controls">
+          <GameToolbar
+            mistakes={game.mistakes}
+            hintsRemaining={game.hintsRemaining}
+            onHint={game.applyHint}
+            hintDisabled={game.isHintDisabled()}
+            onUndo={game.undoLastMove}
+            undoDisabled={game.isUndoDisabled()}
+            onNewGame={loadNewPuzzle}
+          />
+          <Keyboard
+            disabled={game.isKeyboardDisabled()}
+            eraseDisabled={game.isEraseDisabled()}
+            onKeyPress={game.assignValue}
+            onErase={game.eraseValue}
+          />
+        </aside>
+      </div>
       <EndgameOverlay variant={endgameVariant} elapsedSeconds={game.elapsedSeconds} onNewGame={loadNewPuzzle} />
     </GameLayout>
   )

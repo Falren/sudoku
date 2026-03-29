@@ -12,6 +12,67 @@
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
+  padding: 0 0.75rem;
+  box-sizing: border-box;
+}
+
+.game-play {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 1.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: min(100%, 68rem);
+}
+
+.game-board-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  width: min(90vw, 90dvh, 500px);
+  max-width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.game-board-stack .board-shell {
+  width: 100%;
+}
+
+.game-play .board-shell {
+  flex-shrink: 0;
+}
+
+.game-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  width: min(16rem, 100%);
+  flex: 0 1 auto;
+}
+
+.game-controls .game-toolbar {
+  max-width: none;
+  width: 100%;
+}
+
+.game-controls .keyboard {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .game-play {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .game-controls {
+    max-width: 18rem;
+  }
 }
 
 .board-shell {
@@ -43,12 +104,6 @@
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65);
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
 .mistakes {
   font-size: 1rem;
   color: #888;
@@ -74,11 +129,6 @@
 .redo-button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-}
-
-.redo-button svg {
-  width: 1.25rem;
-  height: 1.25rem;
 }
 
 .endgame-overlay {

@@ -1,0 +1,22 @@
+.game-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  min-height: 2.75rem;
+  box-sizing: border-box;
+}
+
+.game-header-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.game-header-right {
+  position: relative;
+  z-index: 1;
+  margin-left: auto;
+}

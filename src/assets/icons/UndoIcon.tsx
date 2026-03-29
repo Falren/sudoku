@@ -5,7 +5,7 @@ interface UndoIconProps {
 export function UndoIcon({ className }: UndoIconProps) {
   return (
     <svg
-      className={className}
+      className={className ? `icon icon--undo ${className}` : 'icon icon--undo'}
       fill="currentColor"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"

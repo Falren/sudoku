@@ -16,16 +16,21 @@ export function Keyboard({
 }: KeyboardProps) {
   return (
     <div className="keyboard">
-      {SUDOKU_DIGITS.map((key) => (
-        <button
-          key={key}
-          disabled={disabled}
-          onClick={() => onKeyPress(key)}
-        >
-          {key}
-        </button>
-      ))}
+      <div className="keyboard-dial">
+        {SUDOKU_DIGITS.map((digit) => (
+          <button
+            key={digit}
+            type="button"
+            className="keyboard-digit"
+            disabled={disabled}
+            onClick={() => onKeyPress(digit)}
+          >
+            {digit}
+          </button>
+        ))}
+      </div>
       <button
+        type="button"
         className="keyboard-erase"
         disabled={eraseDisabled}
         onClick={onErase}
