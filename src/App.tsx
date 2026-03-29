@@ -49,6 +49,8 @@ function App() {
         hintsRemaining={game.hintsRemaining}
         onHint={game.applyHint}
         hintDisabled={game.isHintDisabled()}
+        onUndo={game.undoLastMove}
+        undoDisabled={game.isUndoDisabled()}
       />
       <BoardPanel
         board={boardProps}

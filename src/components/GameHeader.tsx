@@ -1,4 +1,4 @@
-import { HintIcon, RefreshIcon } from '@/assets/icons'
+import { HintIcon, RefreshIcon, UndoIcon } from '@/assets/icons'
 import { MAX_MISTAKES } from '@/constants'
 import type { Difficulty } from '@/types'
 
@@ -18,6 +18,8 @@ type GameHeaderProps = {
   onHint: () => void
   hintsRemaining: number
   hintDisabled: boolean
+  onUndo: () => void
+  undoDisabled: boolean
 }
 
 export function GameHeader({
@@ -33,6 +35,8 @@ export function GameHeader({
   hintsRemaining,
   onHint,
   hintDisabled,
+  onUndo,
+  undoDisabled,
 }: GameHeaderProps) {
   return (
     <div className="header">
@@ -47,6 +51,15 @@ export function GameHeader({
         Mistakes: {mistakes} / {MAX_MISTAKES}
       </div>
       <DifficultySelector value={difficulty} onChange={onDifficultyChange} />
+      <button
+        type="button"
+        className="redo-button"
+        onClick={onUndo}
+        disabled={undoDisabled}
+        title="Undo (⌘Z / Ctrl+Z)"
+      >
+        <UndoIcon />
+      </button>
       <button
         type="button"
         className="redo-button"

@@ -6,6 +6,8 @@ interface SudokuHandlers {
   eraseValue: () => void
   isKeyboardDisabled: () => boolean
   isEraseDisabled: () => boolean
+  undoLastMove: () => void
+  isUndoDisabled: () => boolean
 }
 
 export function useSudokuKeyboard(handlersRef: React.RefObject<SudokuHandlers>) {
@@ -14,9 +16,15 @@ export function useSudokuKeyboard(handlersRef: React.RefObject<SudokuHandlers>) 
       if (!handlers.isEraseDisabled()) handlers.eraseValue()
     }
     const onKeyDown = (e: KeyboardEvent) => {
-      e.preventDefault()
-
       const handlers = handlersRef.current
+
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') {
+        e.preventDefault()
+        if (!handlers.isUndoDisabled()) handlers.undoLastMove()
+        return
+      }
+
+      e.preventDefault()
       if (handlers.isKeyboardDisabled()) return
 
       const isEraseKey = e.key === ERASE_KEY
