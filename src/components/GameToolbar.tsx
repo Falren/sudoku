@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react'
+
 import { HintIcon, RefreshIcon, UndoIcon } from '@/assets/icons'
 import { MAX_MISTAKES } from '@/constants'
 
@@ -22,9 +24,27 @@ export function GameToolbar({
   undoDisabled,
   onNewGame,
 }: GameToolbarProps) {
+  const [mistakeFeedback, setMistakeFeedback] = useState(false)
+  const [mistakeAnimKey, setMistakeAnimKey] = useState(0)
+  const prevMistakes = useRef(mistakes)
+
+  useEffect(() => {
+    if (mistakes > prevMistakes.current) {
+      setMistakeAnimKey((key) => key + 1)
+      setMistakeFeedback(true)
+      const id = window.setTimeout(() => setMistakeFeedback(false), 780)
+      prevMistakes.current = mistakes
+      return () => window.clearTimeout(id)
+    }
+    prevMistakes.current = mistakes
+  }, [mistakes])
+
   return (
     <div className="game-toolbar">
-      <div className="mistakes">
+      <div
+        key={mistakeAnimKey}
+        className={mistakeFeedback ? 'mistakes mistakes--mistake' : 'mistakes'}
+      >
         Mistakes: {mistakes} / {MAX_MISTAKES}
       </div>
       <button
