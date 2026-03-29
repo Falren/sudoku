@@ -9,15 +9,15 @@
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 1;
-  color: #dfdfc4;
+  color: var(--color-hint-ripple-a);
 }
 
 .hint-square-layer {
-  color: #dfdfc4;
+  color: var(--color-hint-ripple-a);
 }
 
 .hint-square-layer--1 {
-  color: #262626;
+  color: var(--color-hint-ripple-b);
 }
 
 .hint-square-anim {

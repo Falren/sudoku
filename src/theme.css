@@ -1,0 +1,169 @@
+/* Theme tokens — set data-theme on <html> (see index.html + useTheme) */
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --theme-transition-duration: 0.45s;
+  --theme-ease: cubic-bezier(0.33, 1, 0.68, 1);
+
+  --color-bg-page: #242424;
+  --color-text-primary: rgba(255, 255, 255, 0.87);
+  --color-text-muted: #888;
+  --color-text-timer: #ccc;
+  --color-link: #646cff;
+  --color-link-hover: #535bf2;
+
+  --color-board-selected: #333;
+  --color-board-selected-cell: #555;
+  --color-board-border-thin: #ccc;
+  --color-board-border-thick: #444;
+
+  --color-keyboard-digit-bg: #2a2a2a;
+  --color-keyboard-digit-border: #333;
+  --color-keyboard-digit-hover-bg: #3a3a3a;
+  --color-keyboard-digit-hover-border: #646cff;
+
+  --color-keyboard-erase-bg: #333;
+  --color-keyboard-erase-border: #555;
+  --color-keyboard-erase-text: #888;
+  --color-keyboard-erase-hover-bg: #444;
+  --color-keyboard-erase-hover-text: #fff;
+
+  --color-difficulty-border: #555;
+  --color-difficulty-hover-border: #777;
+  --color-difficulty-hover-bg: #3a3a3a;
+  --color-difficulty-active-bg: #444;
+  --color-difficulty-active-border: #888;
+
+  --color-redo: #888;
+  --color-redo-hover-bg: #444;
+  --color-redo-hover-text: #fff;
+
+  --color-timer-toggle-disabled: #888;
+
+  --color-endgame-card: #333;
+  --color-endgame-text: #fff;
+  --color-endgame-sub: #bbb;
+  --color-endgame-button-hover-bg: #555;
+  --color-endgame-win-border: rgba(120, 200, 140, 0.45);
+
+  --color-overlay-scrim: rgba(0, 0, 0, 0.7);
+  --color-pause-overlay: rgba(0, 0, 0, 0.22);
+  --color-pause-caption: rgba(255, 255, 255, 0.95);
+  --color-pause-caption-shadow: rgba(0, 0, 0, 0.65);
+
+  --color-mistake-feedback: #e57373;
+  --color-toolbar-mistakes: #888;
+
+  --color-cell-error: #f87171;
+
+  --color-hint-ripple-a: #dfdfc4;
+  --color-hint-ripple-b: #262626;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  --theme-transition-duration: 0.45s;
+  --theme-ease: cubic-bezier(0.33, 1, 0.68, 1);
+
+  --color-bg-page: #f0f2f5;
+  --color-text-primary: #1a2d3d;
+  --color-text-muted: #5a6570;
+  --color-text-timer: #3d4a5c;
+  --color-link: #4f5fd7;
+  --color-link-hover: #3d4bc4;
+
+  --color-board-selected: #e4eaf2;
+  --color-board-selected-cell: #cfdcee;
+  --color-board-border-thin: #b0bac8;
+  --color-board-border-thick: #3d4a5c;
+
+  --color-keyboard-digit-bg: #ffffff;
+  --color-keyboard-digit-border: #c5cdd8;
+  --color-keyboard-digit-hover-bg: #eef2f8;
+  --color-keyboard-digit-hover-border: #4f5fd7;
+
+  --color-keyboard-erase-bg: #ffffff;
+  --color-keyboard-erase-border: #b0bac8;
+  --color-keyboard-erase-text: #5a6570;
+  --color-keyboard-erase-hover-bg: #eef2f8;
+  --color-keyboard-erase-hover-text: #1a2d3d;
+
+  --color-difficulty-border: #b0bac8;
+  --color-difficulty-hover-border: #8a96a8;
+  --color-difficulty-hover-bg: #eef2f8;
+  --color-difficulty-active-bg: #e0e8f2;
+  --color-difficulty-active-border: #5a6570;
+
+  --color-redo: #5a6570;
+  --color-redo-hover-bg: #e4eaf2;
+  --color-redo-hover-text: #1a2d3d;
+
+  --color-timer-toggle-disabled: #8a96a8;
+
+  --color-endgame-card: #ffffff;
+  --color-endgame-text: #1a2d3d;
+  --color-endgame-sub: #5a6570;
+  --color-endgame-button-hover-bg: #eef2f8;
+  --color-endgame-win-border: rgba(60, 140, 90, 0.45);
+
+  --color-overlay-scrim: rgba(30, 40, 55, 0.45);
+  --color-pause-overlay: rgba(255, 255, 255, 0.65);
+  --color-pause-caption: #1a2d3d;
+  --color-pause-caption-shadow: rgba(255, 255, 255, 0.5);
+
+  --color-mistake-feedback: #c62828;
+  --color-toolbar-mistakes: #5a6570;
+
+  --color-cell-error: #c62828;
+
+  --color-hint-ripple-a: #c4b896;
+  --color-hint-ripple-b: #d8dde6;
+}
+
+body,
+#root,
+.main,
+.board,
+.cell,
+.redo-button,
+.timer,
+.game-toolbar .mistakes,
+.difficulty-option,
+.keyboard .keyboard-digit,
+.keyboard-erase,
+.endgame-message,
+.endgame-overlay,
+.board-pause-overlay,
+.board-pause-caption,
+.endgame-sub,
+.hint-square-svg {
+  transition-property: background-color, color, border-color, box-shadow, text-shadow, fill, stroke;
+  transition-duration: var(--theme-transition-duration);
+  transition-timing-function: var(--theme-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  #root,
+  a,
+  button,
+  .main,
+  .board,
+  .cell,
+  .redo-button,
+  .timer,
+  .game-toolbar .mistakes,
+  .difficulty-option,
+  .keyboard .keyboard-digit,
+  .keyboard-erase,
+  .endgame-message,
+  .endgame-overlay,
+  .board-pause-overlay,
+  .board-pause-caption,
+  .endgame-sub,
+  .hint-square-svg {
+    transition-duration: 0.01ms;
+  }
+}

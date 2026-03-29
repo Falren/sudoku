@@ -10,14 +10,19 @@
 
 .game-toolbar .mistakes {
   font-size: 1rem;
-  color: #888;
-  transition: color 0.2s ease;
+  color: var(--color-toolbar-mistakes);
+  transition:
+    color var(--theme-transition-duration) var(--theme-ease),
+    transform 0.75s ease;
   display: inline-block;
 }
 
 .game-toolbar .mistakes.mistakes--mistake {
-  color: #e57373;
+  color: var(--color-mistake-feedback);
   animation: mistakes-shake 0.75s ease;
+  transition:
+    color 0.12s ease-out,
+    transform 0.75s ease;
 }
 
 @keyframes mistakes-shake {

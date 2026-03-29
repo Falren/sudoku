@@ -1,11 +1,15 @@
 import type { Difficulty } from '@/types'
+import type { Theme } from '@/hooks'
 
 import { DifficultySelector } from './DifficultySelector.tsx'
+import { ThemeToggle } from './ThemeToggle.tsx'
 import { Timer } from './Timer.tsx'
 
 import './GameHeader.css'
 
 type GameHeaderProps = {
+  theme: Theme
+  onToggleTheme: () => void
   difficulty: Difficulty
   onDifficultyChange: (next: Difficulty) => void
   elapsedSeconds: number
@@ -16,6 +20,8 @@ type GameHeaderProps = {
 }
 
 export function GameHeader({
+  theme,
+  onToggleTheme,
   difficulty,
   onDifficultyChange,
   elapsedSeconds,
@@ -26,6 +32,9 @@ export function GameHeader({
 }: GameHeaderProps) {
   return (
     <header className="game-header">
+      <div className="game-header-left">
+        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+      </div>
       <div className="game-header-center">
         <DifficultySelector value={difficulty} onChange={onDifficultyChange} />
       </div>

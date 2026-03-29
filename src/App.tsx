@@ -4,7 +4,7 @@ import '@/App.css'
 
 import { BoardPanel, EndgameOverlay, GameHeader, GameLayout, GameToolbar, Keyboard } from '@/components'
 import { puzzles } from '@/data'
-import { useSudokuGame } from '@/hooks'
+import { useSudokuGame, useTheme } from '@/hooks'
 
 import type { Difficulty } from '@/types'
 
@@ -19,6 +19,7 @@ function App() {
     return list[Math.floor(Math.random() * list.length)]
   }, [puzzleKey, difficulty])
   const game = useSudokuGame(puzzle)
+  const { theme, toggleTheme } = useTheme()
   const loadNewPuzzle = () => setPuzzleKey((previousKey) => previousKey + 1)
   const onDifficultyChange = useCallback((next: Difficulty) => {
     setDifficulty(next)
@@ -39,6 +40,8 @@ function App() {
       <div className="game-play">
         <div className="game-board-stack">
           <GameHeader
+            theme={theme}
+            onToggleTheme={toggleTheme}
             difficulty={difficulty}
             onDifficultyChange={onDifficultyChange}
             elapsedSeconds={game.elapsedSeconds}

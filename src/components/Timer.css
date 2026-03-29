@@ -7,7 +7,7 @@
 .timer {
   font-size: 1rem;
   font-variant-numeric: tabular-nums;
-  color: #ccc;
+  color: var(--color-text-timer);
   min-width: 4.5ch;
 }
 
@@ -17,6 +17,6 @@
 }
 
 .timer-toggle:disabled:hover {
-  color: #888;
+  color: var(--color-timer-toggle-disabled);
   background: transparent;
 }

@@ -1,7 +1,7 @@
 .board {
-  --selected: #333;
-  --border-thin: 1px solid #ccc;
-  --border-thick: 1px solid #444;
+  --selected: var(--color-board-selected);
+  --border-thin: 1px solid var(--color-board-border-thin);
+  --border-thick: 1px solid var(--color-board-border-thick);
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -45,7 +45,7 @@
 }
 
 .cell.selectedCell {
-  background-color: #555;
+  background-color: var(--color-board-selected-cell);
 }
 
 .cell:nth-child(3n) {
@@ -57,5 +57,5 @@
 }
 
 .cell.incorrect {
-  color: red;
+  color: var(--color-cell-error);
 }

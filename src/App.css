@@ -2,6 +2,7 @@
   text-align: center;
   height: 100dvh;
   width: 100dvw;
+  background-color: var(--color-bg-page);
 }
 
 .main {
@@ -90,7 +91,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.22);
+  background: var(--color-pause-overlay);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -100,8 +101,8 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65);
+  color: var(--color-pause-caption);
+  text-shadow: 0 1px 10px var(--color-pause-caption-shadow);
 }
 
 .redo-button {
@@ -109,7 +110,7 @@
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: #888;
+  color: var(--color-redo);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -117,8 +118,8 @@
 }
 
 .redo-button:hover:not(:disabled) {
-  color: #fff;
-  background: #444;
+  color: var(--color-redo-hover-text);
+  background: var(--color-redo-hover-bg);
 }
 
 .redo-button:disabled {
@@ -129,7 +130,7 @@
 .endgame-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--color-overlay-scrim);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,11 +138,11 @@
 }
 
 .endgame-message {
-  background: #333;
+  background: var(--color-endgame-card);
   padding: 2rem 3rem;
   border-radius: 8px;
   font-size: 1.5rem;
-  color: white;
+  color: var(--color-endgame-text);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -149,20 +150,20 @@
 }
 
 .endgame-message .redo-button {
-  color: white;
+  color: var(--color-endgame-text);
   padding: 0.5rem 1.5rem;
 }
 
 .endgame-message .redo-button:hover {
-  background: #555;
+  background: var(--color-endgame-button-hover-bg);
 }
 
 .endgame-message-win {
-  border: 1px solid rgba(120, 200, 140, 0.45);
+  border: 1px solid var(--color-endgame-win-border);
 }
 
 .endgame-sub {
   font-size: 1rem;
-  color: #bbb;
+  color: var(--color-endgame-sub);
   font-variant-numeric: tabular-nums;
 }
