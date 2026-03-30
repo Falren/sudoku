@@ -38,6 +38,7 @@
 .keyboard-erase:hover:not(:disabled) {
   background: var(--color-keyboard-erase-hover-bg);
   color: var(--color-keyboard-erase-hover-text);
+  border-color: var(--color-keyboard-erase-hover-border);
 }
 
 .keyboard-erase:disabled {

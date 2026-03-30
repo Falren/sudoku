@@ -1,7 +1,7 @@
 .board {
   --selected: var(--color-board-selected);
   --border-thin: 1px solid var(--color-board-border-thin);
-  --border-thick: 1px solid var(--color-board-border-thick);
+  --border-thick: 2px solid var(--color-board-border-thick);
   display: flex;
   flex-direction: column;
   width: 100%;

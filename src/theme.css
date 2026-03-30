@@ -1,5 +1,3 @@
-/* Theme tokens — set data-theme on <html> (see index.html + useTheme) */
-
 [data-theme='dark'] {
   color-scheme: dark;
 
@@ -16,21 +14,22 @@
   --color-board-selected: #333;
   --color-board-selected-cell: #555;
   --color-board-border-thin: #ccc;
-  --color-board-border-thick: #444;
+  --color-board-border-thick: #e0e0e0;
 
   --color-keyboard-digit-bg: #2a2a2a;
   --color-keyboard-digit-border: #333;
   --color-keyboard-digit-hover-bg: #3a3a3a;
-  --color-keyboard-digit-hover-border: #646cff;
+  --color-keyboard-digit-hover-border: #d0d0d0;
 
   --color-keyboard-erase-bg: #333;
   --color-keyboard-erase-border: #555;
   --color-keyboard-erase-text: #888;
   --color-keyboard-erase-hover-bg: #444;
   --color-keyboard-erase-hover-text: #fff;
+  --color-keyboard-erase-hover-border: #d0d0d0;
 
   --color-difficulty-border: #555;
-  --color-difficulty-hover-border: #777;
+  --color-difficulty-hover-border: #d0d0d0;
   --color-difficulty-hover-bg: #3a3a3a;
   --color-difficulty-active-bg: #444;
   --color-difficulty-active-border: #888;
@@ -82,16 +81,17 @@
   --color-keyboard-digit-bg: #ffffff;
   --color-keyboard-digit-border: #c5cdd8;
   --color-keyboard-digit-hover-bg: #eef2f8;
-  --color-keyboard-digit-hover-border: #4f5fd7;
+  --color-keyboard-digit-hover-border: #5a6570;
 
   --color-keyboard-erase-bg: #ffffff;
   --color-keyboard-erase-border: #b0bac8;
   --color-keyboard-erase-text: #5a6570;
   --color-keyboard-erase-hover-bg: #eef2f8;
   --color-keyboard-erase-hover-text: #1a2d3d;
+  --color-keyboard-erase-hover-border: #5a6570;
 
   --color-difficulty-border: #b0bac8;
-  --color-difficulty-hover-border: #8a96a8;
+  --color-difficulty-hover-border: #5a6570;
   --color-difficulty-hover-bg: #eef2f8;
   --color-difficulty-active-bg: #e0e8f2;
   --color-difficulty-active-border: #5a6570;
