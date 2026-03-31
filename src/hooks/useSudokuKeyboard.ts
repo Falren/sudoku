@@ -38,6 +38,8 @@ export function useSudokuKeyboard(handlersRef: React.RefObject<SudokuHandlers>) 
         return
       }
 
+      if (e.metaKey || e.ctrlKey || e.altKey) return
+
       e.preventDefault()
       if (handlers.isKeyboardDisabled()) return
 

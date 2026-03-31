@@ -1,39 +1,42 @@
 #root {
   text-align: center;
-  height: 100dvh;
+  min-height: 100dvh;
   width: 100dvw;
   background-color: var(--color-bg-page);
 }
 
 .main {
-  height: 100%;
+  min-height: 100dvh;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  justify-content: safe center;
   align-items: center;
   gap: 1.5rem;
-  padding: 0 0.75rem;
+  padding: max(0.75rem, env(safe-area-inset-top, 0px)) 0.75rem
+    max(0.75rem, env(safe-area-inset-bottom, 0px));
   box-sizing: border-box;
 }
 
 .game-play {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
-  gap: 1rem 1.5rem;
   flex-wrap: wrap;
+  gap: 1rem 1.5rem;
   width: 100%;
   max-width: min(100%, 68rem);
 }
 
+/* Square board: width sets grid size; keep it modest so the on-screen numpad fits below */
 .game-board-stack {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 0.75rem;
-  width: min(90vw, 90dvh, 500px);
+  width: min(90vw, calc(100dvh - 10rem), 500px);
   max-width: 100%;
   flex-shrink: 0;
   box-sizing: border-box;
@@ -54,6 +57,7 @@
   gap: 1rem;
   width: min(16rem, 100%);
   flex: 0 1 auto;
+  align-self: center;
 }
 
 .game-controls .game-toolbar {
@@ -69,6 +73,11 @@
   .game-play {
     flex-direction: column;
     align-items: center;
+  }
+
+  .game-board-stack {
+    align-self: center;
+    width: min(86vw, calc(100dvh - 26rem), 360px);
   }
 
   .game-controls {
