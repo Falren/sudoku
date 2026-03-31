@@ -4,6 +4,7 @@ import { ERASE_KEY } from '@/constants'
 interface SudokuHandlers {
   assignValue: (value: number) => void
   eraseValue: () => void
+  moveSelection: (deltaRow: number, deltaCol: number) => void
   isKeyboardDisabled: () => boolean
   isEraseDisabled: () => boolean
   undoLastMove: () => void
@@ -21,6 +22,19 @@ export function useSudokuKeyboard(handlersRef: React.RefObject<SudokuHandlers>) 
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') {
         e.preventDefault()
         if (!handlers.isUndoDisabled()) handlers.undoLastMove()
+        return
+      }
+
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault()
+        const deltas: Record<string, readonly [number, number]> = {
+          ArrowUp: [-1, 0],
+          ArrowDown: [1, 0],
+          ArrowLeft: [0, -1],
+          ArrowRight: [0, 1],
+        }
+        const d = deltas[e.key]
+        handlers.moveSelection(d[0], d[1])
         return
       }
 
