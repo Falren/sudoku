@@ -27,6 +27,7 @@ function App() {
   }, [])
   const endgameVariant = game.gameOver ? 'loss' : game.gameWon ? 'victory' : null
   const boardProps = {
+    selectedCell: game.selectedCell,
     getCellValue: game.getCellValue,
     getCellNotes: game.getCellNotes,
     getCellValidation: game.getCellValidation,

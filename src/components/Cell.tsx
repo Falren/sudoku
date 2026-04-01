@@ -6,6 +6,7 @@ import { HintSquareRipples } from './HintSquareRipples'
 
 interface CellProps {
   position: CellPosition
+  cellDataId: string
   value: number
   notes: readonly number[]
   isIncorrect: boolean
@@ -17,6 +18,7 @@ interface CellProps {
 
 export function Cell({
   position,
+  cellDataId,
   value,
   notes,
   isIncorrect,
@@ -37,9 +39,10 @@ export function Cell({
   return (
     <span
       className={cellClass}
+      data-sudoku-cell={cellDataId}
       onClick={() => onSelect(position)}
       role="button"
-      tabIndex={0}
+      tabIndex={isSelected ? 0 : -1}
     >
       {isHintFlash && <HintSquareRipples />}
       {value !== 0 ? (

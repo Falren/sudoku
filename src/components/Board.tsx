@@ -1,8 +1,12 @@
+import { useEffect, useRef } from 'react'
+
 import '@/components/Board.css'
 import { Cell } from './Cell'
 import type { CellPosition } from '@/types'
+import { cellKey } from '@/utils'
 
 export interface BoardProps {
+  selectedCell: CellPosition
   getCellValue: (row: number, col: number) => number
   getCellNotes: (row: number, col: number) => number[]
   getCellValidation: (row: number, col: number) => boolean | null
@@ -14,6 +18,7 @@ export interface BoardProps {
 }
 
 export function Board({
+  selectedCell,
   getCellValue,
   getCellNotes,
   getCellValidation,
@@ -23,8 +28,20 @@ export function Board({
   isHintFlash,
   onSelectCell,
 }: BoardProps) {
+  const boardRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const [row, col] = selectedCell
+    if (row < 0 || col < 0) return
+    const root = boardRef.current
+    if (!root) return
+    const id = cellKey(row, col)
+    const el = root.querySelector<HTMLElement>(`[data-sudoku-cell="${id}"]`)
+    el?.focus({ preventScroll: true })
+  }, [selectedCell])
+
   return (
-    <div className="board">
+    <div className="board" ref={boardRef}>
       {Array.from({ length: 9 }, (_, rowIndex) => (
         <div className="board-row" key={rowIndex}>
           {Array.from({ length: 9 }, (_, cellIndex) => {
@@ -37,6 +54,7 @@ export function Board({
               <Cell
                 key={cellIndex}
                 position={pos}
+                cellDataId={cellKey(rowIndex, cellIndex)}
                 value={value}
                 notes={notes}
                 isIncorrect={isIncorrect}
