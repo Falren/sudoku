@@ -8,6 +8,31 @@
   max-width: min(90vw, 28rem);
 }
 
+.game-toolbar .toolbar-notes {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-sizing: border-box;
+  min-width: 2rem;
+  min-height: 2rem;
+}
+
+.game-toolbar .toolbar-notes--active {
+  background: var(--color-keyboard-notes-active-bg);
+  border-color: var(--color-keyboard-notes-active-border);
+  color: var(--color-keyboard-notes-active-text);
+}
+
+.game-toolbar .toolbar-notes--active:hover:not(:disabled) {
+  background: var(--color-keyboard-notes-active-bg);
+  color: var(--color-keyboard-notes-active-text);
+}
+
+.toolbar-notes-icon {
+  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
 .game-toolbar .mistakes {
   font-size: 1rem;
   color: var(--color-toolbar-mistakes);

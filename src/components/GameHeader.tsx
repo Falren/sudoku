@@ -3,6 +3,8 @@ import { useCallback, useEffect, useId, useState } from 'react'
 import type { Difficulty } from '@/types'
 import type { Theme } from '@/hooks'
 
+import { RefreshIcon } from '@/assets/icons'
+
 import { DifficultySelector } from './DifficultySelector.tsx'
 import { ThemeToggle } from './ThemeToggle.tsx'
 import { Timer } from './Timer.tsx'
@@ -19,6 +21,7 @@ type GameHeaderProps = {
   gameOver: boolean
   gameWon: boolean
   onToggleTimer: () => void
+  onNewGame: () => void
 }
 
 export function GameHeader({
@@ -31,6 +34,7 @@ export function GameHeader({
   gameOver,
   gameWon,
   onToggleTimer,
+  onNewGame,
 }: GameHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuTitleId = useId()
@@ -87,6 +91,15 @@ export function GameHeader({
           gameWon={gameWon}
           onToggleTimer={onToggleTimer}
         />
+        <button
+          type="button"
+          className="redo-button game-header-icon-button"
+          onClick={onNewGame}
+          title="New Game"
+          aria-label="New Game"
+        >
+          <RefreshIcon />
+        </button>
       </div>
 
       {menuOpen && (

@@ -6,14 +6,18 @@ export function RefreshIcon({ className }: RefreshIconProps) {
   return (
     <svg
       className={className ? `icon ${className}` : 'icon'}
-      fill="currentColor"
-      viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      viewBox="0 0 16 16"
       aria-hidden
     >
-      <g transform="scale(1.5)">
-        <path d="M7.94.56a8.05 8.05 0 0 1 6.82 3.64V1.55H16V5a1.16 1.16 0 0 1-1.15 1.15h-3.44V4.9h2.32a6.79 6.79 0 0 0-5.79-3.1A6.48 6.48 0 0 0 1.24 8a6.48 6.48 0 0 0 6.7 6.2 6.48 6.48 0 0 0 6.7-6.2h1.24a7.71 7.71 0 0 1-7.94 7.44A7.71 7.71 0 0 1 0 8 7.71 7.71 0 0 1 7.94.56z" />
-      </g>
+      <path
+        fillRule="evenodd"
+        d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
+      />
+      <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
     </svg>
   )
 }

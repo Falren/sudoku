@@ -14,3 +14,5 @@ export interface UserInput {
 }
 
 export type UserInputsMap = Map<string, UserInput>
+
+export type CellNotesMap = Map<string, Set<number>>

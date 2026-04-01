@@ -30,7 +30,22 @@
   justify-self: end;
   display: flex;
   align-items: center;
+  gap: 0.35rem;
   min-width: 0;
+}
+
+.game-header-icon-button {
+  flex: none;
+}
+
+.redo-button.game-header-icon-button {
+  padding: 0.125rem;
+  box-sizing: border-box;
+}
+
+.game-header-icon-button .icon {
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .game-header-slot--wide {

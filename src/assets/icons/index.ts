@@ -1,4 +1,5 @@
 export { HintIcon } from './HintIcon'
+export { PencilIcon } from './PencilIcon'
 export { UndoIcon } from './UndoIcon'
 export { RefreshIcon } from './RefreshIcon'
 export { PlayIcon } from './PlayIcon'

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { ERASE_KEY } from '@/constants'
+import { ERASE_KEY, NOTES_TOGGLE_KEY } from '@/constants'
 
 interface SudokuHandlers {
   assignValue: (value: number) => void
@@ -9,6 +9,7 @@ interface SudokuHandlers {
   isEraseDisabled: () => boolean
   undoLastMove: () => void
   isUndoDisabled: () => boolean
+  toggleNotesMode: () => void
 }
 
 export function useSudokuKeyboard(handlersRef: React.RefObject<SudokuHandlers>) {
@@ -35,6 +36,12 @@ export function useSudokuKeyboard(handlersRef: React.RefObject<SudokuHandlers>) 
         }
         const d = deltas[e.key]
         handlers.moveSelection(d[0], d[1])
+        return
+      }
+
+      if (e.key.toLowerCase() === NOTES_TOGGLE_KEY && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault()
+        handlers.toggleNotesMode()
         return
       }
 

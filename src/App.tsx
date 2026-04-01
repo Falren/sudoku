@@ -28,6 +28,7 @@ function App() {
   const endgameVariant = game.gameOver ? 'loss' : game.gameWon ? 'victory' : null
   const boardProps = {
     getCellValue: game.getCellValue,
+    getCellNotes: game.getCellNotes,
     getCellValidation: game.getCellValidation,
     isCross: game.isCross,
     isBlock: game.isBlock,
@@ -49,6 +50,7 @@ function App() {
             gameOver={game.gameOver}
             gameWon={game.gameWon}
             onToggleTimer={game.toggleTimer}
+            onNewGame={loadNewPuzzle}
           />
           <BoardPanel
             board={boardProps}
@@ -63,7 +65,8 @@ function App() {
             hintDisabled={game.isHintDisabled()}
             onUndo={game.undoLastMove}
             undoDisabled={game.isUndoDisabled()}
-            onNewGame={loadNewPuzzle}
+            notesMode={game.notesMode}
+            onToggleNotes={game.toggleNotesMode}
           />
           <Keyboard
             disabled={game.isKeyboardDisabled()}

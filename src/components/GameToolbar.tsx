@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { HintIcon, RefreshIcon, UndoIcon } from '@/assets/icons'
+import { HintIcon, PencilIcon, UndoIcon } from '@/assets/icons'
 import { MAX_MISTAKES } from '@/constants'
 
 import './GameToolbar.css'
@@ -12,7 +12,8 @@ type GameToolbarProps = {
   hintDisabled: boolean
   onUndo: () => void
   undoDisabled: boolean
-  onNewGame: () => void
+  notesMode: boolean
+  onToggleNotes: () => void
 }
 
 export function GameToolbar({
@@ -22,7 +23,8 @@ export function GameToolbar({
   hintDisabled,
   onUndo,
   undoDisabled,
-  onNewGame,
+  notesMode,
+  onToggleNotes,
 }: GameToolbarProps) {
   const [mistakeFeedback, setMistakeFeedback] = useState(false)
   const [mistakeAnimKey, setMistakeAnimKey] = useState(0)
@@ -65,8 +67,19 @@ export function GameToolbar({
       >
         <HintIcon />
       </button>
-      <button type="button" className="redo-button" onClick={onNewGame} title="New Game">
-        <RefreshIcon />
+      <button
+        type="button"
+        className={
+          notesMode
+            ? 'redo-button toolbar-notes toolbar-notes--active'
+            : 'redo-button toolbar-notes'
+        }
+        onClick={onToggleNotes}
+        title="Notes (N)"
+        aria-label="Notes"
+        aria-pressed={notesMode}
+      >
+        <PencilIcon className="toolbar-notes-icon" />
       </button>
     </div>
   )

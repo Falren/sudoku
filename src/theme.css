@@ -56,6 +56,13 @@
 
   --color-cell-error: #f87171;
 
+  --color-keyboard-notes-border: #555;
+  --color-keyboard-notes-bg: #2a2a2a;
+  --color-keyboard-notes-text: #888;
+  --color-keyboard-notes-active-bg: #3d4a5c;
+  --color-keyboard-notes-active-border: #7a8a9e;
+  --color-keyboard-notes-active-text: #e5e7eb;
+
   --color-hint-ripple-a: #dfdfc4;
   --color-hint-ripple-b: #262626;
 }
@@ -117,6 +124,13 @@
   --color-toolbar-mistakes: #5a6570;
 
   --color-cell-error: #c62828;
+
+  --color-keyboard-notes-border: #b0bac8;
+  --color-keyboard-notes-bg: #ffffff;
+  --color-keyboard-notes-text: #5a6570;
+  --color-keyboard-notes-active-bg: #e0e8f2;
+  --color-keyboard-notes-active-border: #5a6570;
+  --color-keyboard-notes-active-text: #1a2d3d;
 
   --color-hint-ripple-a: #c4b896;
   --color-hint-ripple-b: #d8dde6;

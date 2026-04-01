@@ -16,9 +16,11 @@ export function Timer({ elapsedSeconds, timerStopped, gameOver, gameWon, onToggl
       <div className="timer">{formatElapsedSeconds(elapsedSeconds)}</div>
       <button
         type="button"
-        className="redo-button timer-toggle"
+        className="redo-button game-header-icon-button"
         onClick={onToggleTimer}
         disabled={gameOver || gameWon}
+        title={timerStopped ? 'Resume' : 'Pause'}
+        aria-label={timerStopped ? 'Resume timer' : 'Pause timer'}
       >
         {timerStopped ? <PlayIcon /> : <PauseIcon />}
       </button>

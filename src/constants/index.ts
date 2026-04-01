@@ -5,3 +5,4 @@ export const NO_SELECTION: CellPosition = [-1, -1]
 export const MAX_MISTAKES = 3
 export const MAX_HINTS = 3
 export const ERASE_KEY = 'Backspace'
+export const NOTES_TOGGLE_KEY = 'n'

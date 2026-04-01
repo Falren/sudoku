@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
-import type { Puzzle, CellPosition, UserInput, UserInputsMap } from '@/types'
+import type { Puzzle, CellPosition, UserInput, UserInputsMap, CellNotesMap } from '@/types'
 import { cellKey, isGridSolved, isCross, isBlock, isSelected } from '@/utils'
 import { MAX_HINTS, MAX_MISTAKES } from '@/constants'
 import { useSudokuKeyboard } from './useSudokuKeyboard'
@@ -7,11 +7,20 @@ import { useSudokuKeyboard } from './useSudokuKeyboard'
 type UndoEntry = {
   key: string
   before: UserInput | undefined
+  notesBefore: number[]
   decrementHint: boolean
+}
+
+function snapshotNotes(notesMap: CellNotesMap, key: string): number[] {
+  const set = notesMap.get(key)
+  if (!set || set.size === 0) return []
+  return [...set].sort((a, b) => a - b)
 }
 
 export function useSudokuGame(puzzle: Puzzle) {
   const [userInputs, setUserInputs] = useState<UserInputsMap>(new Map())
+  const [cellNotes, setCellNotes] = useState<CellNotesMap>(new Map())
+  const [notesMode, setNotesMode] = useState(false)
   const [selectedCell, setSelectedCell] = useState<CellPosition>([-1, -1])
   const [mistakes, setMistakes] = useState(0)
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
@@ -37,6 +46,8 @@ export function useSudokuGame(puzzle: Puzzle) {
 
   useEffect(() => {
     setUserInputs(new Map())
+    setCellNotes(new Map())
+    setNotesMode(false)
     setSelectedCell([-1, -1])
     setMistakes(0)
     setElapsedSeconds(0)
@@ -82,10 +93,56 @@ export function useSudokuGame(puzzle: Puzzle) {
     const [row, col] = selectedCell
     return selectedCell[0] >= 0 && !fixed[row][col]
   }
-  const assignValue = (value: number) => {
-    if (!canEditSelected()) return
+
+  const canToggleNotesAtCell = (): boolean => {
+    if (!canEditSelected()) return false
     const [row, col] = selectedCell
     const key = cellKey(row, col)
+    if (userInputs.has(key)) return false
+    return puzzle.board[row][col] === 0
+  }
+
+  const toggleNotesMode = () => {
+    setNotesMode((previous) => !previous)
+  }
+
+  const toggleNote = (value: number) => {
+    if (!canToggleNotesAtCell()) return
+    const [row, col] = selectedCell
+    const key = cellKey(row, col)
+    const notesBefore = snapshotNotes(cellNotes, key)
+    const previous = userInputs.get(key)
+    const beforeSnapshot = previous ? { ...previous } : undefined
+    setCellNotes((prev) => {
+      const updated = new Map(prev)
+      const current = updated.get(key) ?? new Set<number>()
+      const next = new Set(current)
+      if (next.has(value)) next.delete(value)
+      else next.add(value)
+      if (next.size === 0) updated.delete(key)
+      else updated.set(key, next)
+      return updated
+    })
+    setUndoStack((stack) => [
+      ...stack,
+      {
+        key,
+        before: beforeSnapshot,
+        notesBefore,
+        decrementHint: false,
+      },
+    ])
+  }
+
+  const assignValue = (value: number) => {
+    if (!canEditSelected()) return
+    if (notesMode) {
+      toggleNote(value)
+      return
+    }
+    const [row, col] = selectedCell
+    const key = cellKey(row, col)
+    const notesBefore = snapshotNotes(cellNotes, key)
     const previous = userInputs.get(key)
     const beforeSnapshot = previous ? { ...previous } : undefined
     const isCorrect = solution[row][col] === value
@@ -95,11 +152,17 @@ export function useSudokuGame(puzzle: Puzzle) {
       updated.set(key, { value, isCorrect })
       return updated
     })
+    setCellNotes((prev) => {
+      const updated = new Map(prev)
+      updated.delete(key)
+      return updated
+    })
     setUndoStack((stack) => [
       ...stack,
       {
         key,
         before: beforeSnapshot,
+        notesBefore,
         decrementHint: false,
       },
     ])
@@ -108,9 +171,31 @@ export function useSudokuGame(puzzle: Puzzle) {
     if (!canEditSelected()) return
     const [row, col] = selectedCell
     const key = cellKey(row, col)
-    const previous = userInputs.get(key)
-    if (!previous || previous.isCorrect) return
-    const beforeSnapshot = { ...previous }
+    const notes = cellNotes.get(key)
+    if (notes && notes.size > 0) {
+      const notesBefore = snapshotNotes(cellNotes, key)
+      const previous = userInputs.get(key)
+      const beforeSnapshot = previous ? { ...previous } : undefined
+      setCellNotes((prev) => {
+        const updated = new Map(prev)
+        updated.delete(key)
+        return updated
+      })
+      setUndoStack((stack) => [
+        ...stack,
+        {
+          key,
+          before: beforeSnapshot,
+          notesBefore,
+          decrementHint: false,
+        },
+      ])
+      return
+    }
+    const input = userInputs.get(key)
+    if (!input || input.isCorrect) return
+    const beforeSnapshot = { ...input }
+    const notesBefore = snapshotNotes(cellNotes, key)
     setUserInputs((prev) => {
       const updated = new Map(prev)
       updated.delete(key)
@@ -121,6 +206,7 @@ export function useSudokuGame(puzzle: Puzzle) {
       {
         key,
         before: beforeSnapshot,
+        notesBefore,
         decrementHint: false,
       },
     ])
@@ -140,6 +226,15 @@ export function useSudokuGame(puzzle: Puzzle) {
         }
         return updated
       })
+      setCellNotes((prev) => {
+        const updated = new Map(prev)
+        if (entry.notesBefore.length === 0) {
+          updated.delete(entry.key)
+        } else {
+          updated.set(entry.key, new Set(entry.notesBefore))
+        }
+        return updated
+      })
       if (entry.decrementHint) {
         setHintsUsed((count) => Math.max(0, count - 1))
       }
@@ -152,6 +247,10 @@ export function useSudokuGame(puzzle: Puzzle) {
   const getCellValue = (row: number, col: number): number => {
     const input = userInputs.get(cellKey(row, col))
     return input ? input.value : puzzle.board[row][col]
+  }
+
+  const getCellNotes = (row: number, col: number): number[] => {
+    return snapshotNotes(cellNotes, cellKey(row, col))
   }
 
   const hintCandidates = (): CellPosition[] => {
@@ -170,10 +269,10 @@ export function useSudokuGame(puzzle: Puzzle) {
   const applyHint = () => {
     if (gameOver || gameWon || timerStopped) return
     if (hintsUsed >= MAX_HINTS) return
-    
+
     const candidates = hintCandidates()
     if (candidates.length === 0) return
-    
+
     const [selectedRow, selectedColumn] = selectedCell
     const preferSelected =
       selectedRow >= 0 &&
@@ -193,10 +292,16 @@ export function useSudokuGame(puzzle: Puzzle) {
     const key = cellKey(row, col)
     const previous = userInputs.get(key)
     const beforeSnapshot = previous ? { ...previous } : undefined
+    const notesBefore = snapshotNotes(cellNotes, key)
     const value = solution[row][col]
     setUserInputs((prev) => {
       const updated = new Map(prev)
       updated.set(key, { value, isCorrect: true })
+      return updated
+    })
+    setCellNotes((prev) => {
+      const updated = new Map(prev)
+      updated.delete(key)
       return updated
     })
     setHintsUsed((count) => count + 1)
@@ -205,6 +310,7 @@ export function useSudokuGame(puzzle: Puzzle) {
       {
         key,
         before: beforeSnapshot,
+        notesBefore,
         decrementHint: true,
       },
     ])
@@ -225,10 +331,19 @@ export function useSudokuGame(puzzle: Puzzle) {
     const input = userInputs.get(cellKey(row, col))
     return input ? input.isCorrect : null
   }
-  const isKeyboardDisabled = (): boolean => !canEditSelected()
+  const isKeyboardDisabled = (): boolean => {
+    if (gameOver || gameWon || timerStopped) return true
+    if (notesMode) return !canToggleNotesAtCell()
+    return !canEditSelected()
+  }
   const isEraseDisabled = (): boolean => {
-    if (isKeyboardDisabled()) return true
-    const input = userInputs.get(cellKey(selectedCell[0], selectedCell[1]))
+    if (gameOver || gameWon || timerStopped) return true
+    const [row, col] = selectedCell
+    if (selectedCell[0] < 0) return true
+    const key = cellKey(row, col)
+    const notes = cellNotes.get(key)
+    if (notes && notes.size > 0) return false
+    const input = userInputs.get(key)
     return !input || input.isCorrect
   }
   const handlersRef = useRef({
@@ -239,6 +354,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     isEraseDisabled,
     undoLastMove,
     isUndoDisabled,
+    toggleNotesMode,
   })
   handlersRef.current = {
     assignValue,
@@ -248,6 +364,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     isEraseDisabled,
     undoLastMove,
     isUndoDisabled,
+    toggleNotesMode,
   }
   useSudokuKeyboard(handlersRef)
 
@@ -266,6 +383,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     assignValue,
     eraseValue,
     getCellValue,
+    getCellNotes,
     getCellValidation,
     isCross: (pos: CellPosition) => isCross(selectedCell, pos),
     isBlock: (pos: CellPosition) => isBlock(selectedCell, pos),
@@ -278,5 +396,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     isHintFlash,
     undoLastMove,
     isUndoDisabled,
+    notesMode,
+    toggleNotesMode,
   }
 }

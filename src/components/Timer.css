@@ -1,7 +1,7 @@
 .timer-row {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.35rem;
 }
 
 .timer {
@@ -9,14 +9,4 @@
   font-variant-numeric: tabular-nums;
   color: var(--color-text-timer);
   min-width: 4.5ch;
-}
-
-.timer-toggle:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.timer-toggle:disabled:hover {
-  color: var(--color-timer-toggle-disabled);
-  background: transparent;
 }
