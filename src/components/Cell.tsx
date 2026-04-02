@@ -13,6 +13,7 @@ interface CellProps {
   isHighlighted: boolean
   isSelected: boolean
   isHintFlash: boolean
+  mistakeShakeId: number | null
   onSelect: (pos: CellPosition) => void
 }
 
@@ -25,6 +26,7 @@ export function Cell({
   isHighlighted,
   isSelected,
   isHintFlash,
+  mistakeShakeId,
   onSelect,
 }: CellProps) {
   const cellClass = [
@@ -46,7 +48,12 @@ export function Cell({
     >
       {isHintFlash && <HintSquareRipples />}
       {value !== 0 ? (
-        value
+        <span
+          className={mistakeShakeId != null ? 'cell-mistake-shake' : undefined}
+          key={mistakeShakeId ?? 'digit'}
+        >
+          {value}
+        </span>
       ) : (
         <span className="cell-notes-grid" aria-hidden>
           {SUDOKU_DIGITS.map((digit) => (

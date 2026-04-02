@@ -35,6 +35,7 @@ function App() {
     isBlock: game.isBlock,
     isSelected: game.isSelected,
     isHintFlash: game.isHintFlash,
+    getMistakeShakeId: game.getMistakeShakeId,
     onSelectCell: game.selectCell,
   }
   return (

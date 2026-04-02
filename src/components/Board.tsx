@@ -14,6 +14,7 @@ export interface BoardProps {
   isBlock: (pos: CellPosition) => boolean
   isSelected: (pos: CellPosition) => boolean
   isHintFlash: (pos: CellPosition) => boolean
+  getMistakeShakeId: (pos: CellPosition) => number | null
   onSelectCell: (pos: CellPosition) => void
 }
 
@@ -26,6 +27,7 @@ export function Board({
   isBlock,
   isSelected,
   isHintFlash,
+  getMistakeShakeId,
   onSelectCell,
 }: BoardProps) {
   const boardRef = useRef<HTMLDivElement>(null)
@@ -61,6 +63,7 @@ export function Board({
                 isHighlighted={isBlock(pos) || isCross(pos)}
                 isSelected={isSelected(pos)}
                 isHintFlash={isHintFlash(pos)}
+                mistakeShakeId={getMistakeShakeId(pos)}
                 onSelect={onSelectCell}
               />
             )

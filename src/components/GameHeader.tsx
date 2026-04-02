@@ -93,7 +93,7 @@ export function GameHeader({
         />
         <button
           type="button"
-          className="redo-button game-header-icon-button"
+          className="redo-button game-header-icon-button game-header-new-game"
           onClick={onNewGame}
           title="New Game"
           aria-label="New Game"

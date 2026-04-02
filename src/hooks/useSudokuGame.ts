@@ -27,6 +27,8 @@ export function useSudokuGame(puzzle: Puzzle) {
   const [timerStopped, setTimerStopped] = useState(false)
   const [hintsUsed, setHintsUsed] = useState(0)
   const [hintFlashCell, setHintFlashCell] = useState<CellPosition | null>(null)
+  const [mistakeShake, setMistakeShake] = useState<{ pos: CellPosition; id: number } | null>(null)
+  const mistakeShakeIdRef = useRef(0)
   const [undoStack, setUndoStack] = useState<UndoEntry[]>([])
 
   const solution = useMemo(
@@ -54,8 +56,15 @@ export function useSudokuGame(puzzle: Puzzle) {
     setTimerStopped(false)
     setHintsUsed(0)
     setHintFlashCell(null)
+    setMistakeShake(null)
     setUndoStack([])
   }, [puzzle])
+
+  useEffect(() => {
+    if (!mistakeShake) return
+    const id = window.setTimeout(() => setMistakeShake(null), 750)
+    return () => window.clearTimeout(id)
+  }, [mistakeShake])
 
   useEffect(() => {
     if (!hintFlashCell) return
@@ -146,7 +155,11 @@ export function useSudokuGame(puzzle: Puzzle) {
     const previous = userInputs.get(key)
     const beforeSnapshot = previous ? { ...previous } : undefined
     const isCorrect = solution[row][col] === value
-    if (!isCorrect) setMistakes((prev) => prev + 1)
+    if (!isCorrect) {
+      setMistakes((prev) => prev + 1)
+      mistakeShakeIdRef.current += 1
+      setMistakeShake({ pos: [row, col], id: mistakeShakeIdRef.current })
+    }
     setUserInputs((prev) => {
       const updated = new Map(prev)
       updated.set(key, { value, isCorrect })
@@ -320,6 +333,12 @@ export function useSudokuGame(puzzle: Puzzle) {
   const isHintFlash = (pos: CellPosition): boolean =>
     hintFlashCell !== null && pos[0] === hintFlashCell[0] && pos[1] === hintFlashCell[1]
 
+  const getMistakeShakeId = (pos: CellPosition): number | null => {
+    if (!mistakeShake) return null
+    if (pos[0] !== mistakeShake.pos[0] || pos[1] !== mistakeShake.pos[1]) return null
+    return mistakeShake.id
+  }
+
   const isHintDisabled = (): boolean =>
     gameOver ||
     gameWon ||
@@ -394,6 +413,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     applyHint,
     isHintDisabled,
     isHintFlash,
+    getMistakeShakeId,
     undoLastMove,
     isUndoDisabled,
     notesMode,

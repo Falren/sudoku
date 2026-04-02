@@ -60,6 +60,36 @@
   color: var(--color-cell-error);
 }
 
+.cell-mistake-shake {
+  display: inline-block;
+  animation: cell-mistake-shake 0.75s ease;
+}
+
+@keyframes cell-mistake-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell-mistake-shake {
+    animation: none;
+  }
+}
+
 .cell-notes-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

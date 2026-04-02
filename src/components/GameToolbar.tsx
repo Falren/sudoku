@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { HintIcon, PencilIcon, UndoIcon } from '@/assets/icons'
-import { MAX_MISTAKES } from '@/constants'
+import { MAX_HINTS, MAX_MISTAKES } from '@/constants'
 
 import './GameToolbar.css'
 
@@ -58,15 +58,21 @@ export function GameToolbar({
       >
         <UndoIcon />
       </button>
-      <button
-        type="button"
-        className="redo-button"
-        onClick={onHint}
-        disabled={hintDisabled}
-        title={`Hint (${hintsRemaining} left)`}
-      >
-        <HintIcon />
-      </button>
+      <div className="toolbar-hint-wrap">
+        <span className="toolbar-hint-count" aria-hidden>
+          {hintsRemaining}/{MAX_HINTS}
+        </span>
+        <button
+          type="button"
+          className="redo-button"
+          onClick={onHint}
+          disabled={hintDisabled}
+          title={`Hint (${hintsRemaining} left)`}
+          aria-label={`Hint, ${hintsRemaining} of ${MAX_HINTS} remaining`}
+        >
+          <HintIcon />
+        </button>
+      </div>
       <button
         type="button"
         className={

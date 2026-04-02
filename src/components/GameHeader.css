@@ -41,11 +41,18 @@
 .redo-button.game-header-icon-button {
   padding: 0.125rem;
   box-sizing: border-box;
+  min-width: 2rem;
+  min-height: 2rem;
 }
 
 .game-header-icon-button .icon {
   width: 1.75rem;
   height: 1.75rem;
+}
+
+.game-header-icon-button.game-header-new-game .icon {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .game-header-slot--wide {
