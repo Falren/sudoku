@@ -1,5 +1,11 @@
 export { isCross, isBlock, isSelected } from './cellHelpers'
 export { cellKey, parseCellKey } from './cellKey'
+export {
+  cellsInSameRowVerticalOrBox,
+  removeDigitFromNotesInSameRowVerticalOrBox,
+  serializeCellNotes,
+  deserializeCellNotes,
+} from './cellNotesRowVerticalBox'
 export { isGridSolved } from './isGridSolved'
 export { getPuzzlesForDifficulty } from './puzzleDifficulty'
 

@@ -1,13 +1,22 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import type { Puzzle, CellPosition, UserInput, UserInputsMap, CellNotesMap } from '@/types'
-import { cellKey, isGridSolved, isCross, isBlock, isSelected } from '@/utils'
+import {
+  cellKey,
+  deserializeCellNotes,
+  isGridSolved,
+  isCross,
+  isBlock,
+  isSelected,
+  removeDigitFromNotesInSameRowVerticalOrBox,
+  serializeCellNotes,
+} from '@/utils'
 import { MAX_HINTS, MAX_MISTAKES } from '@/constants'
 import { useSudokuKeyboard } from './useSudokuKeyboard'
 
 type UndoEntry = {
   key: string
   before: UserInput | undefined
-  notesBefore: number[]
+  cellNotesSnapshotBefore: Map<string, number[]>
   decrementHint: boolean
 }
 
@@ -119,7 +128,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     if (!canToggleNotesAtCell()) return
     const [row, col] = selectedCell
     const key = cellKey(row, col)
-    const notesBefore = snapshotNotes(cellNotes, key)
+    const cellNotesSnapshotBefore = serializeCellNotes(cellNotes)
     const previous = userInputs.get(key)
     const beforeSnapshot = previous ? { ...previous } : undefined
     setCellNotes((prev) => {
@@ -137,7 +146,7 @@ export function useSudokuGame(puzzle: Puzzle) {
       {
         key,
         before: beforeSnapshot,
-        notesBefore,
+        cellNotesSnapshotBefore,
         decrementHint: false,
       },
     ])
@@ -151,7 +160,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     }
     const [row, col] = selectedCell
     const key = cellKey(row, col)
-    const notesBefore = snapshotNotes(cellNotes, key)
+    const cellNotesSnapshotBefore = serializeCellNotes(cellNotes)
     const previous = userInputs.get(key)
     const beforeSnapshot = previous ? { ...previous } : undefined
     const isCorrect = solution[row][col] === value
@@ -166,16 +175,16 @@ export function useSudokuGame(puzzle: Puzzle) {
       return updated
     })
     setCellNotes((prev) => {
-      const updated = new Map(prev)
-      updated.delete(key)
-      return updated
+      const cleared = new Map(prev)
+      cleared.delete(key)
+      return removeDigitFromNotesInSameRowVerticalOrBox(cleared, row, col, value)
     })
     setUndoStack((stack) => [
       ...stack,
       {
         key,
         before: beforeSnapshot,
-        notesBefore,
+        cellNotesSnapshotBefore,
         decrementHint: false,
       },
     ])
@@ -186,7 +195,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     const key = cellKey(row, col)
     const notes = cellNotes.get(key)
     if (notes && notes.size > 0) {
-      const notesBefore = snapshotNotes(cellNotes, key)
+      const cellNotesSnapshotBefore = serializeCellNotes(cellNotes)
       const previous = userInputs.get(key)
       const beforeSnapshot = previous ? { ...previous } : undefined
       setCellNotes((prev) => {
@@ -199,7 +208,7 @@ export function useSudokuGame(puzzle: Puzzle) {
         {
           key,
           before: beforeSnapshot,
-          notesBefore,
+          cellNotesSnapshotBefore,
           decrementHint: false,
         },
       ])
@@ -208,7 +217,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     const input = userInputs.get(key)
     if (!input || input.isCorrect) return
     const beforeSnapshot = { ...input }
-    const notesBefore = snapshotNotes(cellNotes, key)
+    const cellNotesSnapshotBefore = serializeCellNotes(cellNotes)
     setUserInputs((prev) => {
       const updated = new Map(prev)
       updated.delete(key)
@@ -219,7 +228,7 @@ export function useSudokuGame(puzzle: Puzzle) {
       {
         key,
         before: beforeSnapshot,
-        notesBefore,
+        cellNotesSnapshotBefore,
         decrementHint: false,
       },
     ])
@@ -239,15 +248,7 @@ export function useSudokuGame(puzzle: Puzzle) {
         }
         return updated
       })
-      setCellNotes((prev) => {
-        const updated = new Map(prev)
-        if (entry.notesBefore.length === 0) {
-          updated.delete(entry.key)
-        } else {
-          updated.set(entry.key, new Set(entry.notesBefore))
-        }
-        return updated
-      })
+      setCellNotes(deserializeCellNotes(entry.cellNotesSnapshotBefore))
       if (entry.decrementHint) {
         setHintsUsed((count) => Math.max(0, count - 1))
       }
@@ -305,7 +306,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     const key = cellKey(row, col)
     const previous = userInputs.get(key)
     const beforeSnapshot = previous ? { ...previous } : undefined
-    const notesBefore = snapshotNotes(cellNotes, key)
+    const cellNotesSnapshotBefore = serializeCellNotes(cellNotes)
     const value = solution[row][col]
     setUserInputs((prev) => {
       const updated = new Map(prev)
@@ -313,9 +314,9 @@ export function useSudokuGame(puzzle: Puzzle) {
       return updated
     })
     setCellNotes((prev) => {
-      const updated = new Map(prev)
-      updated.delete(key)
-      return updated
+      const cleared = new Map(prev)
+      cleared.delete(key)
+      return removeDigitFromNotesInSameRowVerticalOrBox(cleared, row, col, value)
     })
     setHintsUsed((count) => count + 1)
     setUndoStack((stack) => [
@@ -323,7 +324,7 @@ export function useSudokuGame(puzzle: Puzzle) {
       {
         key,
         before: beforeSnapshot,
-        notesBefore,
+        cellNotesSnapshotBefore,
         decrementHint: true,
       },
     ])
