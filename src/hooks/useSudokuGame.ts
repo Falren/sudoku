@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from 'react'
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import type { Puzzle, CellPosition, UserInput, UserInputsMap, CellNotesMap } from '@/types'
 import {
   cellKey,
@@ -94,6 +94,17 @@ export function useSudokuGame(puzzle: Puzzle) {
     if (gameOver || gameWon) return
     setTimerStopped((previous) => !previous)
   }
+
+  const unpauseIfPaused = useCallback((): boolean => {
+    if (gameOver || gameWon) return false
+    let resumed = false
+    setTimerStopped((wasStopped) => {
+      if (!wasStopped) return wasStopped
+      resumed = true
+      return false
+    })
+    return resumed
+  }, [gameOver, gameWon])
 
   const selectCell = (pos: CellPosition) => setSelectedCell(pos)
 
@@ -398,6 +409,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     elapsedSeconds,
     timerStopped,
     toggleTimer,
+    unpauseIfPaused,
     gameOver,
     gameWon,
     selectedCell,

@@ -30,7 +30,7 @@
   max-width: min(100%, 68rem);
 }
 
-/* Square board: width sets grid size; keep it modest so the on-screen numpad fits below */
+
 .game-board-stack {
   display: flex;
   flex-direction: column;
@@ -87,9 +87,47 @@
 
 .board-shell {
   position: relative;
-  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.5rem;
+  width: 100%;
   max-width: 100%;
+  min-width: 0;
+  margin-bottom: 1.25rem;
   overflow: visible;
+}
+
+.board-area-with-overlay {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.board-pause-hint-below {
+  display: none;
+  margin: 0;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  opacity: 0.82;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .board-pause-hint-below {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 1.35rem);
+    z-index: 3;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+  }
 }
 
 .board-pause-overlay {
@@ -99,19 +137,56 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
   border-radius: 10px;
   background: var(--color-pause-overlay);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .board-pause-caption {
-  font-size: 1.75rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  margin: 0;
+  max-width: 100%;
+  text-align: center;
+  font-size: clamp(0.8rem, 3.5vmin, 1.55rem);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  line-height: 1.35;
   text-transform: uppercase;
   color: var(--color-pause-caption);
-  text-shadow: 0 1px 10px var(--color-pause-caption-shadow);
+  text-shadow: 0 1px 6px var(--color-pause-caption-shadow);
+}
+
+.board-pause-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.12em;
+  padding: 0.2em 0.55em 0.28em;
+  vertical-align: middle;
+  font-family: inherit;
+  font-size: 0.68em;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--color-pause-kbd-text);
+  text-shadow: none;
+  background: var(--color-pause-kbd-bg);
+  border: 1px solid var(--color-pause-kbd-border);
+  border-radius: 6px;
+  box-shadow:
+    0 1px 0 var(--color-pause-kbd-inset) inset,
+    0 1px 0 var(--color-pause-kbd-shadow),
+    0 2px 4px rgba(0, 0, 0, 0.14);
+}
+
+.board-pause-kbd--hint {
+  margin: 0 0.2em 0 0;
+  padding: 0.2em 0.45em 0.26em;
+  font-size: 0.95em;
+  border-radius: 5px;
 }
 
 .redo-button {

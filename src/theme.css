@@ -47,9 +47,14 @@
   --color-endgame-win-border: rgba(120, 200, 140, 0.45);
 
   --color-overlay-scrim: rgba(0, 0, 0, 0.7);
-  --color-pause-overlay: rgba(0, 0, 0, 0.22);
-  --color-pause-caption: rgba(255, 255, 255, 0.95);
-  --color-pause-caption-shadow: rgba(0, 0, 0, 0.65);
+  --color-pause-overlay: rgba(0, 0, 0, 0.16);
+  --color-pause-caption: rgba(255, 255, 255, 0.68);
+  --color-pause-caption-shadow: rgba(0, 0, 0, 0.35);
+  --color-pause-kbd-bg: rgba(38, 38, 38, 0.88);
+  --color-pause-kbd-border: rgba(255, 255, 255, 0.12);
+  --color-pause-kbd-text: rgba(255, 255, 255, 0.78);
+  --color-pause-kbd-shadow: rgba(0, 0, 0, 0.38);
+  --color-pause-kbd-inset: rgba(255, 255, 255, 0.06);
 
   --color-mistake-feedback: #e57373;
   --color-toolbar-mistakes: #888;
@@ -117,9 +122,14 @@
   --color-endgame-win-border: rgba(60, 140, 90, 0.45);
 
   --color-overlay-scrim: rgba(30, 40, 55, 0.45);
-  --color-pause-overlay: rgba(255, 255, 255, 0.65);
-  --color-pause-caption: #1a2d3d;
-  --color-pause-caption-shadow: rgba(255, 255, 255, 0.5);
+  --color-pause-overlay: rgba(255, 255, 255, 0.48);
+  --color-pause-caption: rgba(90, 101, 112, 0.92);
+  --color-pause-caption-shadow: rgba(255, 255, 255, 0.35);
+  --color-pause-kbd-bg: rgba(255, 255, 255, 0.82);
+  --color-pause-kbd-border: rgba(176, 186, 200, 0.65);
+  --color-pause-kbd-text: rgba(45, 58, 72, 0.88);
+  --color-pause-kbd-shadow: rgba(30, 40, 55, 0.12);
+  --color-pause-kbd-inset: rgba(255, 255, 255, 0.65);
 
   --color-mistake-feedback: #c62828;
   --color-toolbar-mistakes: #5a6570;
@@ -153,6 +163,7 @@ body,
 .endgame-overlay,
 .board-pause-overlay,
 .board-pause-caption,
+.board-pause-kbd,
 .endgame-sub,
 .hint-square-svg {
   transition-property: background-color, color, border-color, box-shadow, text-shadow, fill, stroke;
@@ -178,6 +189,7 @@ body,
   .endgame-overlay,
   .board-pause-overlay,
   .board-pause-caption,
+  .board-pause-kbd,
   .endgame-sub,
   .hint-square-svg {
     transition-duration: 0.01ms;

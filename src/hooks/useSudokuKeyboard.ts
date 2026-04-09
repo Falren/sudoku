@@ -12,13 +12,14 @@ interface SudokuHandlers {
   toggleNotesMode: () => void
 }
 
-export function useSudokuKeyboard(handlersRef: React.RefObject<SudokuHandlers>) {
+export function useSudokuKeyboard(handlersRef: React.RefObject<SudokuHandlers | null>) {
   useEffect(() => {
     function handleErase(handlers: SudokuHandlers) {
       if (!handlers.isEraseDisabled()) handlers.eraseValue()
     }
     const onKeyDown = (e: KeyboardEvent) => {
       const handlers = handlersRef.current
+      if (!handlers) return
 
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') {
         e.preventDefault()

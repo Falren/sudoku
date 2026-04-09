@@ -58,6 +58,7 @@ function App() {
           <BoardPanel
             board={boardProps}
             showPauseOverlay={game.timerStopped && !game.gameOver && !game.gameWon}
+            unpauseIfPaused={game.unpauseIfPaused}
           />
         </div>
         <aside className="game-controls">
