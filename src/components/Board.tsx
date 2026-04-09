@@ -9,6 +9,7 @@ export interface BoardProps {
   selectedCell: CellPosition
   getCellValue: (row: number, col: number) => number
   getCellNotes: (row: number, col: number) => number[]
+  isNoteDigitInConflict: (row: number, col: number, digit: number) => boolean
   getCellValidation: (row: number, col: number) => boolean | null
   isCross: (pos: CellPosition) => boolean
   isBlock: (pos: CellPosition) => boolean
@@ -22,6 +23,7 @@ export function Board({
   selectedCell,
   getCellValue,
   getCellNotes,
+  isNoteDigitInConflict,
   getCellValidation,
   isCross,
   isBlock,
@@ -51,6 +53,8 @@ export function Board({
             const value = getCellValue(rowIndex, cellIndex)
             const notes = getCellNotes(rowIndex, cellIndex)
             const validation = getCellValidation(rowIndex, cellIndex)
+            const noteDigitHasConflict = (digit: number) =>
+              isNoteDigitInConflict(rowIndex, cellIndex, digit)
             const isIncorrect = validation === false
             return (
               <Cell
@@ -59,6 +63,7 @@ export function Board({
                 cellDataId={cellKey(rowIndex, cellIndex)}
                 value={value}
                 notes={notes}
+                noteDigitHasConflict={noteDigitHasConflict}
                 isIncorrect={isIncorrect}
                 isHighlighted={isBlock(pos) || isCross(pos)}
                 isSelected={isSelected(pos)}

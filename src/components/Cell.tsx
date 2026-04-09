@@ -9,6 +9,7 @@ interface CellProps {
   cellDataId: string
   value: number
   notes: readonly number[]
+  noteDigitHasConflict: (digit: number) => boolean
   isIncorrect: boolean
   isHighlighted: boolean
   isSelected: boolean
@@ -22,6 +23,7 @@ export function Cell({
   cellDataId,
   value,
   notes,
+  noteDigitHasConflict,
   isIncorrect,
   isHighlighted,
   isSelected,
@@ -56,11 +58,18 @@ export function Cell({
         </span>
       ) : (
         <span className="cell-notes-grid" aria-hidden>
-          {SUDOKU_DIGITS.map((digit) => (
-            <span key={digit} className="cell-note-digit">
-              {notes.includes(digit) ? digit : ''}
-            </span>
-          ))}
+          {SUDOKU_DIGITS.map((digit) => {
+            const showNote = notes.includes(digit)
+            const conflict = showNote && noteDigitHasConflict(digit)
+            return (
+              <span
+                key={digit}
+                className={['cell-note-digit', conflict && 'cell-note-conflict'].filter(Boolean).join(' ')}
+              >
+                {showNote ? digit : ''}
+              </span>
+            )
+          })}
         </span>
       )}
     </span>

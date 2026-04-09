@@ -62,6 +62,7 @@
   --color-keyboard-notes-active-bg: #3d4a5c;
   --color-keyboard-notes-active-border: #7a8a9e;
   --color-keyboard-notes-active-text: #e5e7eb;
+  --color-note-conflict: #fb923c;
 
   --color-hint-ripple-a: #dfdfc4;
   --color-hint-ripple-b: #262626;
@@ -131,6 +132,7 @@
   --color-keyboard-notes-active-bg: #e0e8f2;
   --color-keyboard-notes-active-border: #5a6570;
   --color-keyboard-notes-active-text: #1a2d3d;
+  --color-note-conflict: #c2410c;
 
   --color-hint-ripple-a: #c4b896;
   --color-hint-ripple-b: #d8dde6;

@@ -27,6 +27,21 @@ export function cellsInSameRowVerticalOrBox(rowIndex: number, columnIndex: numbe
   return positions
 }
 
+export function isNoteCandidateExcludedByPlacedDigits(
+  rowIndex: number,
+  columnIndex: number,
+  candidateDigit: number,
+  getCellValue: (rowIndex: number, columnIndex: number) => number
+): boolean {
+  if (candidateDigit < 1 || candidateDigit > 9) return false
+  for (const [otherRow, otherColumn] of cellsInSameRowVerticalOrBox(rowIndex, columnIndex)) {
+    if (getCellValue(otherRow, otherColumn) === candidateDigit) {
+      return true
+    }
+  }
+  return false
+}
+
 export function removeDigitFromNotesInSameRowVerticalOrBox(
   notesMap: CellNotesMap,
   rowIndex: number,
@@ -38,7 +53,7 @@ export function removeDigitFromNotesInSameRowVerticalOrBox(
     const keyString = cellKey(otherRow, otherColumn)
     const candidateSet = updated.get(keyString)
     if (!candidateSet || !candidateSet.has(digit)) continue
-    
+
     const candidatesAfterRemoval = new Set(candidateSet)
     candidatesAfterRemoval.delete(digit)
     if (candidatesAfterRemoval.size === 0) updated.delete(keyString)

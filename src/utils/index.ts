@@ -2,6 +2,7 @@ export { isCross, isBlock, isSelected } from './cellHelpers'
 export { cellKey, parseCellKey } from './cellKey'
 export {
   cellsInSameRowVerticalOrBox,
+  isNoteCandidateExcludedByPlacedDigits,
   removeDigitFromNotesInSameRowVerticalOrBox,
   serializeCellNotes,
   deserializeCellNotes,

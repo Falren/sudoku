@@ -7,6 +7,7 @@ import {
   isCross,
   isBlock,
   isSelected,
+  isNoteCandidateExcludedByPlacedDigits,
   removeDigitFromNotesInSameRowVerticalOrBox,
   serializeCellNotes,
 } from '@/utils'
@@ -263,6 +264,9 @@ export function useSudokuGame(puzzle: Puzzle) {
     return input ? input.value : puzzle.board[row][col]
   }
 
+  const isNoteDigitInConflict = (row: number, col: number, digit: number): boolean =>
+    isNoteCandidateExcludedByPlacedDigits(row, col, digit, getCellValue)
+
   const getCellNotes = (row: number, col: number): number[] => {
     return snapshotNotes(cellNotes, cellKey(row, col))
   }
@@ -404,6 +408,7 @@ export function useSudokuGame(puzzle: Puzzle) {
     eraseValue,
     getCellValue,
     getCellNotes,
+    isNoteDigitInConflict,
     getCellValidation,
     isCross: (pos: CellPosition) => isCross(selectedCell, pos),
     isBlock: (pos: CellPosition) => isBlock(selectedCell, pos),

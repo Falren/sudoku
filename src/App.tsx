@@ -30,6 +30,7 @@ function App() {
     selectedCell: game.selectedCell,
     getCellValue: game.getCellValue,
     getCellNotes: game.getCellNotes,
+    isNoteDigitInConflict: game.isNoteDigitInConflict,
     getCellValidation: game.getCellValidation,
     isCross: game.isCross,
     isBlock: game.isBlock,
